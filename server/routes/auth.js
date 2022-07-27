@@ -20,7 +20,7 @@ router.get(
 
 router.get('/login/failed', (req, res) => {
     res.status(401).json({
-        message: "FAILED TO LOGIn"
+        message: "Failed to log in"
     })
 })
 

@@ -4,18 +4,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
+var passport = require("./passport")
+const db = require('./db/db');
+const session = require('express-session')
 
+// Routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var auth = require('./routes/auth')
 var secureRoute = require('./routes/secure-route')
 
-var cors = require('cors');
 
-var passport = require("./passport")
-
-const db = require('./db/db');
-const session = require('express-session')
 
 db.connect()
 
