@@ -30,7 +30,7 @@ router.get('/login/success', (req, res) => {
         jwt.sign(
             { user: req.user },
             process.env.JWT_SECRET_KEY,
-            { expiresIn: "1h" },
+            { expiresIn: "3h" },
             (err, token) => {
                 if (err) {
                     return res.json({
@@ -38,6 +38,7 @@ router.get('/login/success', (req, res) => {
                         jwt: null,
                     });
                 }
+                res.cookie('token', token, { httpOnly: true });
                 res.status(200).json({
                     success: true,
                     jwt: token,

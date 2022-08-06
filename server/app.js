@@ -37,13 +37,14 @@ app.use(cors({
     callback(null, true)
   }
 }))
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { 
     maxAge: 360000,
-    secure: false 
+    secure: false // no SSL certif for running locally
   }
 }));
 
@@ -54,8 +55,6 @@ app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/auth', auth)
 app.use("/profile", passport.authenticate('jwt', { session: false }), secureRoute)
-
-
 
 
 
