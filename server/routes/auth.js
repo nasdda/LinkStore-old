@@ -5,52 +5,54 @@ var router = express.Router();
 var passport = require('../passport')
 const jwt = require("jsonwebtoken")
 
-router.get(
-    "/google",
-    passport.authenticate('google', { scope: ["email", "profile"] })
-);
+const User = require('../models/userModel')
 
-router.get(
-    "/google/callback",
-    passport.authenticate('google', { 
-        successRedirect: "http://localhost:3000/",
-        failureRedirect: "/login/failed"
-    }),
-);
-
-router.get('/login/failed', (req, res) => {
-    res.status(401).json({
-        message: "Failed to log in"
-    })
-})
-
-router.get('/login/success', (req, res) => {
-    console.log(req.user)
-    if (req.user) {
-        jwt.sign(
-            { user: req.user },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: "3h" },
-            (err, token) => {
-                if (err) {
-                    return res.json({
-                        success: false,
-                        jwt: null,
+const { OAuth2Client } = require('google-auth-library')
+const client = new OAuth2Client(process.env.CLIENT_ID)
+router.post(
+    "/google-login",
+    async (req, res) => {
+        const idToken = req.body.token
+        console.log("GOT TOKEN: ", idToken)
+        try {
+            const ticket = await client.verifyIdToken({
+                idToken: idToken,
+                audience: process.env.CLIENT_ID
+            })
+            payload = ticket.getPayload()
+            console.log(payload)
+            let user = await User.findOne({ email: payload.email });
+            if (!user) {
+                console.log('Creating new user...');
+                user = new User({
+                    name: payload.name,
+                    email: payload.email
+                });
+                await user.save();
+            }
+            jwt.sign(
+                { user: user },
+                process.env.JWT_SECRET_KEY,
+                { expiresIn: "3h" },
+                (err, token) => {
+                    if (err) {
+                        return res.json({err});
+                    }
+                    res.cookie('jwt', token, { httpOnly: true, secure: true, maxAge: 3600000 });
+                    res.status(200).json({
+                        success: true,
+                        jwt: token,
                     });
                 }
-                res.cookie('token', token, { httpOnly: true });
-                res.status(200).json({
-                    success: true,
-                    jwt: token,
-                });
-            }
-        )
-    } else {
-        res.json({
-            success: false,
-            jwt: null
-        })
+            )            
+        } catch (err) {
+            console.log(err)
+            res.json(err)
+        }
     }
-})
+);
+
+
+
 
 module.exports = router;
