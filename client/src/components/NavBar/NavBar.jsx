@@ -29,7 +29,7 @@ const NavBar = () => {
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    axios.get('/profile/hey', {}, { withCredentials: true }).then(resp => {
+    axios.get('/user', {}, { withCredentials: true }).then(resp => {
       console.log(resp)
       dispatch(setUser({ user: resp.data.user }))
     }).catch(err => {
@@ -58,10 +58,16 @@ const NavBar = () => {
       setAnchorElUser(null);
     },
     'Logout': async () => {
-      await axios.get('/profile/logout', {}, { withCredentials: true })
+      await axios.post('/user/logout', {}, { withCredentials: true })
       setAnchorElUser(null);
       window.location.reload(false);
     },
+  }
+
+  const pageHandlers = {
+    "Explore": handleCloseNavMenu,
+    "Links": handleCloseNavMenu,
+    "About": handleCloseNavMenu
   }
 
   return (
@@ -156,7 +162,7 @@ const NavBar = () => {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar>
-                    <img referrerpolicy="no-referrer" alt="avatar" src={user.picture} style={{height: "100%"}}/>
+                    <img referrerPolicy="no-referrer" alt="avatar" src={user.picture} style={{ height: "100%" }} />
                   </Avatar>
                 </IconButton>
               </Tooltip>

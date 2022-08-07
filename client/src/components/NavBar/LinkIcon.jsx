@@ -16,7 +16,7 @@ function LinkIcon(props) {
   const classes = useStyles()
   return (
     <Icon {...props} classes={{ root: classes.iconRoot }}>
-      <img className={classes.imageIcon} src="/links-icon.jpg" alt="icon" />
+      <img className={classes.imageIcon} src="/link.png" alt="icon" />
     </Icon>
   );
 }

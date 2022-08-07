@@ -15,7 +15,7 @@ router.get('/logout', (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 5 * 1000),
   })
-  res.status(200).json({message: "User logged out"})
+  res.status(200).json({ message: "User logged out" })
 })
 
 module.exports = router;

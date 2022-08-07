@@ -11,7 +11,7 @@ const session = require('express-session')
 
 // Routes
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var userRouter = require('./routes/user');
 var auth = require('./routes/auth')
 var secureRoute = require('./routes/secure-route')
 
@@ -37,11 +37,10 @@ const whitelistDomain = {
 
 app.use(cors({
   credentials: true,
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     if (!origin || whitelistDomain[origin]) {
       callback(null, true)
     } else {
-      console.log(origin)
       callback(new Error('Not allowed by CORS'))
     }
   }
@@ -51,7 +50,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { 
+  cookie: {
     maxAge: 360000,
     secure: false // no SSL certif for running locally
   }
@@ -61,9 +60,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/user', passport.authenticate('jwt', { session: false }), userRouter);
 app.use('/auth', auth)
-app.use("/profile", passport.authenticate('jwt', { session: false }), secureRoute)
+// app.use("/profile", passport.authenticate('jwt', { session: false }), secureRoute)
 
 
 // catch 404 and forward to error handler
