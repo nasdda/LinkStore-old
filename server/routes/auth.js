@@ -15,6 +15,7 @@ router.post("/google-login",
             return res.status(403).json({error: "No credentials"})
         }
         const jwtToken = req.headers.authorization.split(' ')[1]
+        console.log("JWT IS: ", jwtToken)
         try {
             let payload = jwt_decode(jwtToken)
             let user = await User.findOne({ email: payload.email });
@@ -22,7 +23,8 @@ router.post("/google-login",
                 console.log('Creating new user...');
                 user = new User({
                     name: payload.name,
-                    email: payload.email
+                    email: payload.email,
+                    picture: payload.picture
                 });
                 await user.save();
             }
