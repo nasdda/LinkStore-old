@@ -4,23 +4,19 @@ var router = express.Router();
 
 var passport = require('../passport')
 const jwt = require("jsonwebtoken")
+const jwt_decode = require("jwt-decode")
 
 const User = require('../models/userModel')
 
-const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client(process.env.CLIENT_ID)
-router.post(
-    "/google-login",
+
+router.post("/google-login",
     async (req, res) => {
-        const idToken = req.body.token
-        console.log("GOT TOKEN: ", idToken)
+        if(!req.headers.authorization) {
+            return res.status(403).json({error: "No credentials"})
+        }
+        const jwtToken = req.headers.authorization.split(' ')[1]
         try {
-            const ticket = await client.verifyIdToken({
-                idToken: idToken,
-                audience: process.env.CLIENT_ID
-            })
-            payload = ticket.getPayload()
-            console.log(payload)
+            let payload = jwt_decode(jwtToken)
             let user = await User.findOne({ email: payload.email });
             if (!user) {
                 console.log('Creating new user...');
@@ -51,8 +47,6 @@ router.post(
         }
     }
 );
-
-
 
 
 module.exports = router;

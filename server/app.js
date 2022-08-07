@@ -31,10 +31,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const whitelistDomain = {
+  'http://localhost:8080': true
+}
+
 app.use(cors({
   credentials: true,
   origin: function(origin, callback) {
-    callback(null, true)
+    if (!origin || whitelistDomain[origin]) {
+      callback(null, true)
+    } else {
+      console.log(origin)
+      callback(new Error('Not allowed by CORS'))
+    }
   }
 }))
 
@@ -55,7 +64,6 @@ app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/auth', auth)
 app.use("/profile", passport.authenticate('jwt', { session: false }), secureRoute)
-
 
 
 // catch 404 and forward to error handler

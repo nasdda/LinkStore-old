@@ -1,59 +1,35 @@
-import { useGoogleLogin, googleLogout } from '@react-oauth/google';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import GoogleLogin from 'react-google-login';
+import { useEffect, useState } from 'react';
 import './App.css';
-import NavBar from './components/navbar';
+import NavBar from './components/NavBar';
+import axios from 'axios';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [token, setToken] = useState(null);
+  const handleCallbackResponse = async (resp) => {
+    resp = await axios.post('/auth/google-login', {}, {
+      headers: {Authorization: `Bearer ${resp.credential}`},
+      withCredentials: true
+    })
+    if(resp.data.success) {
+      window.location.reload(false);
+    }
+  }
+  
   useEffect(() => {
-  }, []);
-
-  const getProfile = () => {
-    axios.get('/profile/hey', {
-      headers: {
-        withCredentials: true,
-      },
-    }).then((resp) => {
-      console.log(resp);
-    });
-  };
-
-  const googleLoginSuccess = async (googleData) => {
-    const res = await fetch('/auth/google-login', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: googleData.tokenId,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  };
-
-  const googleLoginFailure = (result) => {
-    console.log('FAILED TO LOGIN TO GOOGLE');
-  };
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: process.env.REACT_APP_CLIENT_ID,
+      callback: handleCallbackResponse
+    })
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {theme: "outline", size: "large"}
+    )
+  }, [])
 
   return (
-    <>
-      <NavBar />
-      <div className="App">
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-          buttonText="Login"
-          onSuccess={googleLoginSuccess}
-          onFailure={googleLoginFailure}
-          cookiePolicy="single_host_origin"
-        />
-        <button type="button" onClick={getProfile}>
-          Profile
-        </button>
-      </div>
-    </>
-
+    <div>
+      <NavBar/>
+    </div>
   );
 }
 
