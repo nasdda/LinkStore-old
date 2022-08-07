@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import './App.css';
+import NavBar from './components/navbar';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -37,18 +38,22 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-        buttonText="Login"
-        onSuccess={googleLoginSuccess}
-        onFailure={googleLoginFailure}
-        cookiePolicy="single_host_origin"
-      />
-      <button type="button" onClick={getProfile}>
-        Profile
-      </button>
-    </div>
+    <>
+      <NavBar />
+      <div className="App">
+        <GoogleLogin
+          clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+          buttonText="Login"
+          onSuccess={googleLoginSuccess}
+          onFailure={googleLoginFailure}
+          cookiePolicy="single_host_origin"
+        />
+        <button type="button" onClick={getProfile}>
+          Profile
+        </button>
+      </div>
+    </>
+
   );
 }
 
