@@ -13,9 +13,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 import { useDispatch, useSelector } from 'react-redux'
-import { selectUser, setUser } from '../redux/slice/slice';
+import { selectUser, setUser } from '../../redux/slice/slice'
+
 
 import axios from 'axios';
+import LinkIcon from './LinkIcon';
 
 const pages = ["Explore", "Links", "About"];
 const settings = ['Account', 'Logout'];
@@ -26,10 +28,10 @@ const NavBar = () => {
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
 
-  React.useEffect(() => {    
-    axios.get('/profile/hey', {}, {withCredentials: true}).then(resp => {
+  React.useEffect(() => {
+    axios.get('/profile/hey', {}, { withCredentials: true }).then(resp => {
       console.log(resp)
-      dispatch(setUser({user: resp.data.user}))
+      dispatch(setUser({ user: resp.data.user }))
     }).catch(err => {
       console.log(err)
     })
@@ -52,22 +54,21 @@ const NavBar = () => {
   };
 
   const settingHandlers = {
-    'Account':  () => {
+    'Account': () => {
       setAnchorElUser(null);
-    }, 
-    'Logout': async() => {
-      await axios.get('/profile/logout', {}, {withCredentials: true})
+    },
+    'Logout': async () => {
+      await axios.get('/profile/logout', {}, { withCredentials: true })
       setAnchorElUser(null);
       window.location.reload(false);
     },
   }
 
-
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ backgroundColor: "#252525" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img src="/links-icon.jpg" alt="logo" style={{ width: "1.5rem", marginRight: "0.5rem" }} />
+          <LinkIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -121,6 +122,24 @@ const NavBar = () => {
               ))}
             </Menu>
           </Box>
+          <LinkIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LinkStore
+          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -136,7 +155,9 @@ const NavBar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar>
+                    <img referrerpolicy="no-referrer" alt="avatar" src={user.picture} style={{height: "100%"}}/>
+                  </Avatar>
                 </IconButton>
               </Tooltip>
               <Menu
@@ -162,7 +183,7 @@ const NavBar = () => {
                 ))}
               </Menu>
             </Box> :
-            <div id="signInDiv"/>
+            <div id="signInDiv" />
           }
 
         </Toolbar>

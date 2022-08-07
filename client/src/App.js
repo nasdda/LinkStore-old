@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import NavBar from './components/NavBar';
+import NavBar from './components/NavBar/NavBar';
 import axios from 'axios';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
     })
     google.accounts.id.renderButton(
       document.getElementById("signInDiv"),
-      {theme: "outline", size: "large"}
+      {theme: "outline", size: "medium"}
     )
   }, [])
 
