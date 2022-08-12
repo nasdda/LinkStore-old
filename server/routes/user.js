@@ -1,13 +1,6 @@
 require('dotenv').config()
 var express = require('express');
 var router = express.Router();
-var session = require('express-session')
-const { OAuth2Client } = require('google-auth-library')
-const oAuth2Client = new OAuth2Client(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  'postmessage',
-);
 
 const User = require('../models/userModel')
 const UserLinks = require('../models/userLinksModel')
@@ -23,10 +16,15 @@ router.get('/', async function (req, res) {
 /* GET links of user with given uuid*/
 router.get('/links/:uuid', async (req, res) => {
   if (req.params.uuid != req.user.uuid) {
-    return res.status(401).json({ message: "Not permitted to view the particular links" })
+    return res.status(401).json({ message: "Private Links" })
   }
-  userLinks = UserLinks.findOne({ uuid: req.params.uuid })
-  return res.status(200).json({ links: userLinks.links })
+  try {
+    userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
+    console.log(userLinks)
+    return res.status(200).json({ links: userLinks.links })
+  } catch(err) {
+    return res.status(400).json({message: err})
+  }
 })
 
 router.post('/link', async (req, res) => {

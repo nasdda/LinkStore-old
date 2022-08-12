@@ -4,7 +4,10 @@ import NavBar from './components/NavBar/NavBar';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, setUser } from './redux/slice/slice'
-
+import { Routes, Route, Link } from "react-router-dom";
+import Links from './pages/Links';
+import Home from './pages/Home';
+import Create from './components/pages/Create';
 
 function App() {
   const user = useSelector(selectUser)
@@ -33,18 +36,16 @@ function App() {
   return (
     <div>
       <NavBar />
-      <button onClick={async () => {
-        await axios.post(`/user/link`, {
-          link: {
-            url: 'https://stackoverflow.com/questions/33049707/push-items-into-mongo-array-via-mongoose',
-            title: "stack overflow"
-          }
-        }, { withCredentials: true })
-      }}>
-        Post
-      </button>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/links/:uuid" element={<Links />} />
+        <Route path="/create" element={<Create />} />
+      </Routes>
+
     </div>
   );
 }
 
 export default App;
+
+

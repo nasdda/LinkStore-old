@@ -6,6 +6,7 @@ const schema = mongoose.Schema({
     type: [{
       url: String,
       title: String,
+      description: String
     }],
     default: []
   }

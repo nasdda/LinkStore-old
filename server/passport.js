@@ -1,8 +1,6 @@
 require('dotenv').config()
-const GoogleStrategy = require('passport-google-oauth2').Strategy
 const User = require('./models/userModel')
 const JwtStrategy = require("passport-jwt").Strategy;
-const { ExtractJwt } = require("passport-jwt");
 var passport = require("passport");
 
 var cookieExtractor = function(req) { 

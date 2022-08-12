@@ -11,6 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, setUser } from '../../redux/slice/slice'
@@ -19,14 +22,37 @@ import { selectUser, setUser } from '../../redux/slice/slice'
 import axios from 'axios';
 import LinkIcon from './LinkIcon';
 
-const pages = ["Explore", "Links", "About"];
+const pages = ["Explore", "Links", "Create", "About"];
 const settings = ['Account', 'Logout'];
+
+const useStyles = makeStyles(theme => ({
+  logo: {
+    textDecoration: "none",
+    '&:hover': {
+      color: "inherit",
+      textDecoration: "none"
+    }
+  },
+  pageButton: {
+    border: "none",
+    outline: "none",
+    '&:focus': {
+      border: "none",
+      outline: "none",
+    },
+    '&:hover': {
+      backgroundColor: "grey"
+    }
+  }
+}));
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const classes = useStyles()
 
   React.useEffect(() => {
     axios.get('/user', {}, { withCredentials: true }).then(resp => {
@@ -35,39 +61,37 @@ const NavBar = () => {
     }).catch(err => {
       console.log(err)
     })
-
   }, [])
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   const settingHandlers = {
     'Account': () => {
       setAnchorElUser(null);
     },
     'Logout': async () => {
-      await axios.post('/user/logout', {}, { withCredentials: true })
-      setAnchorElUser(null);
-      window.location.reload(false);
+      try {
+        await axios.post('/user/logout', {}, { withCredentials: true })
+        setAnchorElUser(null);
+      } catch (err) {
+        console.log(err)
+      } finally {
+        navigate('/')
+        window.location.reload(false);
+      }
+
     },
   }
 
   const pageHandlers = {
-    "Explore": handleCloseNavMenu,
-    "Links": handleCloseNavMenu,
-    "About": handleCloseNavMenu
+    "Explore": () => { setAnchorElNav(null); },
+    "Links": () => {
+      navigate(`/links/${user.uuid}`)
+      setAnchorElNav(null)
+    },
+    "About": () => { setAnchorElNav(null); },
+    "Create": () => {
+      navigate('/create')
+      setAnchorElNav(null)
+    }
   }
 
   return (
@@ -88,6 +112,7 @@ const NavBar = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            className={classes.logo}
           >
             LinkStore
           </Typography>
@@ -98,7 +123,7 @@ const NavBar = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={event => { setAnchorElNav(event.currentTarget); }}
               color="inherit"
             >
               <MenuIcon />
@@ -116,13 +141,13 @@ const NavBar = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => { setAnchorElNav(null); }}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={pageHandlers[page]}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -143,6 +168,7 @@ const NavBar = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            className={classes.logo}
           >
             LinkStore
           </Typography>
@@ -150,8 +176,10 @@ const NavBar = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={pageHandlers[page]}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                className={classes.pageButton}
+                disableRipple 
               >
                 {page}
               </Button>
@@ -160,7 +188,7 @@ const NavBar = () => {
           {user ?
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton onClick={(event) => { setAnchorElUser(event.currentTarget); }} sx={{ p: 0 }}>
                   <Avatar>
                     <img referrerPolicy="no-referrer" alt="avatar" src={user.picture} style={{ height: "100%" }} />
                   </Avatar>
@@ -180,7 +208,7 @@ const NavBar = () => {
                   horizontal: 'right',
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                onClose={() => { setAnchorElUser(null) }}
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={settingHandlers[setting]}>

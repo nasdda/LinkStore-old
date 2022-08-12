@@ -3,24 +3,30 @@ var express = require('express');
 var router = express.Router();
 
 const jwt = require("jsonwebtoken")
-const jwt_decode = require("jwt-decode")
 
 const User = require('../models/userModel')
 const UserLinks = require('../models/userLinksModel')
 
+const { OAuth2Client } = require('google-auth-library')
+const client = new OAuth2Client(process.env.CLIENT_ID)
 
 router.post("/google-login",
   async (req, res) => {
     if (!req.headers.authorization) {
-      return res.status(403).json({ error: "No credentials" })
+      return res.status(401).json({ error: "No credentials" })
     }
     const jwtToken = req.headers.authorization.split(' ')[1]
     console.log("JWT IS: ", jwtToken)
     try {
-      let payload = jwt_decode(jwtToken)
-      let user = await User.findOne({ email: payload.email });
+      const ticket = await client.verifyIdToken({
+        idToken: jwtToken,
+        audience: process.env.CLIENT_ID,
+      })
+      const payload = ticket.getPayload()
+      console.log('google client payload: ', payload)
+      let user = await User.findOne({ email: payload.email })
       if (!user) {
-        console.log('Creating new user...');
+        console.log('Creating new user...')
         user = new User({
           name: payload.name,
           email: payload.email,
@@ -32,24 +38,16 @@ router.post("/google-login",
         })
         await links.save()
       }
-      jwt.sign(
+      token = jwt.sign(
         { user: user },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "3h" },
-        (err, token) => {
-          if (err) {
-            return res.json({
-              success: false,
-              message: err
-            });
-          }
-          res.cookie('jwt', token, { httpOnly: true, secure: true, maxAge: 3600000 });
-          res.status(200).json({
-            success: true,
-            jwt: token,
-          });
-        }
+        { expiresIn: "24h" }
       )
+      res.cookie('jwt', token, { httpOnly: true, secure: true, maxAge: 86400000 });
+      res.status(200).json({
+        success: true,
+        jwt: token,
+      });
     } catch (err) {
       console.log(err)
       res.json({
