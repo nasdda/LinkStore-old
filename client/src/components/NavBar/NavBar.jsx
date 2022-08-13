@@ -179,7 +179,7 @@ const NavBar = () => {
                 onClick={pageHandlers[page]}
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 className={classes.pageButton}
-                disableRipple 
+                disableRipple
               >
                 {page}
               </Button>
@@ -225,4 +225,4 @@ const NavBar = () => {
     </AppBar>
   );
 };
-export default NavBar;
+export default React.memo(NavBar);

@@ -5,8 +5,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, setUser } from './redux/slice/slice'
 import { Routes, Route, Link } from "react-router-dom";
-import Links from './pages/Links';
-import Home from './pages/Home';
+import Links from './components/pages/Links';
+import Home from './components/pages/Home';
 import Create from './components/pages/Create';
 
 function App() {
