@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectUser, setUser } from './redux/slice/slice'
 import { Routes, Route, Link } from "react-router-dom";
 import Links from './components/pages/Links';

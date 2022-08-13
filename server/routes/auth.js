@@ -18,12 +18,14 @@ router.post("/google-login",
     const jwtToken = req.headers.authorization.split(' ')[1]
     console.log("JWT IS: ", jwtToken)
     try {
+      // verify google identity
       const ticket = await client.verifyIdToken({
         idToken: jwtToken,
         audience: process.env.CLIENT_ID,
       })
       const payload = ticket.getPayload()
       console.log('google client payload: ', payload)
+
       let user = await User.findOne({ email: payload.email })
       if (!user) {
         console.log('Creating new user...')
@@ -31,7 +33,7 @@ router.post("/google-login",
           name: payload.name,
           email: payload.email,
           picture: payload.picture
-        });
+        })
         await user.save()
         links = new UserLinks({
           uuid: user.uuid
@@ -47,7 +49,7 @@ router.post("/google-login",
       res.status(200).json({
         success: true,
         jwt: token,
-      });
+      })
     } catch (err) {
       console.log(err)
       res.json({
@@ -56,7 +58,7 @@ router.post("/google-login",
       })
     }
   }
-);
+)
 
 
 module.exports = router;

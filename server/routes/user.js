@@ -21,9 +21,12 @@ router.get('/links/:uuid', async (req, res) => {
   try {
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
     console.log(userLinks)
-    return res.status(200).json({ links: userLinks.links })
-  } catch(err) {
-    return res.status(400).json({message: err})
+    return res.status(200).json({
+      links: userLinks.links,
+      tags: userLinks.tags
+    })
+  } catch (err) {
+    return res.status(400).json({ message: err })
   }
 })
 

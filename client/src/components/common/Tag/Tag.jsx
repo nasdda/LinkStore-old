@@ -20,8 +20,8 @@ export const Tag = (props) => {
       <Chip
         label={props.label}
         size="small"
-        onClick={props.handleClick}
-        style={{ backgroundColor: props.backgroundColor, color: color }}
+        onClick={() => { props.onClick(props.label) }}
+        style={{ backgroundColor: props.backgroundColor, color: color, ...props.style }}
         clickable
       />
     </>

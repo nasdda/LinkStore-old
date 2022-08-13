@@ -9,6 +9,12 @@ const schema = mongoose.Schema({
       description: String
     }],
     default: []
+  },
+  tags: {
+    type: [{
+      label: String,
+      backgroundColor: String
+    }]
   }
 });
 

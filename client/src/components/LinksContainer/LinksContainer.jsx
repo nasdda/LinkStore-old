@@ -1,8 +1,10 @@
 import axios from 'axios'
-import React, { useEffect } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { selectLinks } from '../../redux/slice/slice'
 
 function LinksContainer(props) {
-  console.log('links: ', props.links)
+  const links = useSelector(selectLinks)
   return (
     <div>
       container

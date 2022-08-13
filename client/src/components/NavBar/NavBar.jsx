@@ -11,7 +11,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +21,7 @@ import { selectUser, setUser } from '../../redux/slice/slice'
 import axios from 'axios';
 import LinkIcon from './LinkIcon';
 
-const pages = ["Explore", "Links", "Create", "About"];
+const pages = ["Explore", "Links", "Create"];
 const settings = ['Account', 'Logout'];
 
 const muiSX = {
@@ -46,19 +45,6 @@ const muiSX = {
   }
 }
 
-const useStyles = makeStyles(theme => ({
-  buttonRoot: {
-    border: "none",
-    outline: "none",
-    '&:focus': {
-      border: "none",
-      outline: "none",
-    },
-    '&:hover': {
-      backgroundColor: "grey"
-    }
-  }
-}));
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -66,7 +52,6 @@ const NavBar = () => {
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const classes = useStyles()
 
   React.useEffect(() => {
     axios.get('/user', {}, { withCredentials: true }).then(resp => {
@@ -101,7 +86,6 @@ const NavBar = () => {
       navigate(`/links/${user.uuid}`)
       setAnchorElNav(null)
     },
-    "About": () => { setAnchorElNav(null); },
     "Create": () => {
       navigate('/create')
       setAnchorElNav(null)
@@ -208,10 +192,9 @@ const NavBar = () => {
                     outline: "none",
                   },
                   '&:hover': {
-                    backgroundColor: "grey"
+                    backgroundColor: "grey !important"
                   }
                 }}
-                classes={{root: classes.buttonRoot}}
                 disableRipple
               >
                 {page}

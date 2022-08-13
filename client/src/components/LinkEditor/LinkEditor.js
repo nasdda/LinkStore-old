@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { TagContainer } from '../common/TagContainer/TagContainer';
+import { TagSelector } from '../common/TagSelector/TagSelector';
 
 
 
@@ -39,7 +39,7 @@ function LinkEditor(props) {
 
         <Form.Group className="mb-3" controlId="formTags">
           <Form.Label>Tags</Form.Label>
-          <TagContainer />
+          <TagSelector />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
