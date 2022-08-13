@@ -1,20 +1,6 @@
 import React from 'react'
 
-import styled from "styled-components"
-
-const TagButton = styled.button`
-  border-radius: 20px;
-  color: white;
-  text-align: center;
-  font-size: 0.9rem;
-  text-align: center;
-  width: fit-content;
-  height: fit-content;
-  padding: 0.3rem 0.4rem 0.3rem 0.4rem;
-  outline: none;
-  border: none;
-
-`
+import Chip from '@mui/material/Chip';
 
 const textColorFromBG = (backgroundColor) => {
   const R = parseInt(backgroundColor.substring(1, 3), 16)
@@ -30,11 +16,14 @@ const textColorFromBG = (backgroundColor) => {
 export const Tag = (props) => {
   const color = textColorFromBG(props.backgroundColor)
   return (
-    <TagButton
-      style={{ backgroundColor: props.backgroundColor, color: color }}
-      type="button"
-    >
-      {props.children}
-    </TagButton>
+    <>
+      <Chip
+        label={props.label}
+        size="small"
+        onClick={props.handleClick}
+        style={{ backgroundColor: props.backgroundColor, color: color }}
+        clickable
+      />
+    </>
   )
 }

@@ -1,14 +1,15 @@
 import React from 'react'
 
-import styled from "styled-components"
 import { Tag } from '../Tag/Tag'
 
 
 export const TagContainer = (props) => {
-
+  const handleClick = () => {
+    window.alert('You clicked the Chip.');
+  };
   return (
     <div>
-      <Tag backgroundColor="#23e877">Video</Tag>
+      <Tag backgroundColor="#000000" label="Video" onClick={handleClick} />
     </div>
   )
 }

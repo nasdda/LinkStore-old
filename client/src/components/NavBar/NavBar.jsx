@@ -25,7 +25,7 @@ import LinkIcon from './LinkIcon';
 const pages = ["Explore", "Links", "Create", "About"];
 const settings = ['Account', 'Logout'];
 
-const useStyles = makeStyles(theme => ({
+const muiSX = {
   logo: {
     textDecoration: "none",
     '&:hover': {
@@ -33,7 +33,21 @@ const useStyles = makeStyles(theme => ({
       textDecoration: "none"
     }
   },
-  pageButton: {
+  root: {
+    border: "none",
+    outline: "none",
+    '&:focus': {
+      border: "none",
+      outline: "none",
+    },
+    '&:hover': {
+      backgroundColor: "grey"
+    }
+  }
+}
+
+const useStyles = makeStyles(theme => ({
+  buttonRoot: {
     border: "none",
     outline: "none",
     '&:focus': {
@@ -111,8 +125,11 @@ const NavBar = () => {
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
+              '&:hover': {
+                color: "inherit",
+                textDecoration: "none"
+              }
             }}
-            className={classes.logo}
           >
             LinkStore
           </Typography>
@@ -167,8 +184,11 @@ const NavBar = () => {
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
+              '&:hover': {
+                color: "inherit",
+                textDecoration: "none"
+              }
             }}
-            className={classes.logo}
           >
             LinkStore
           </Typography>
@@ -177,8 +197,21 @@ const NavBar = () => {
               <Button
                 key={page}
                 onClick={pageHandlers[page]}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                className={classes.pageButton}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: 'block',
+                  border: "none",
+                  outline: "none",
+                  '&:focus': {
+                    border: "none",
+                    outline: "none",
+                  },
+                  '&:hover': {
+                    backgroundColor: "grey"
+                  }
+                }}
+                classes={{root: classes.buttonRoot}}
                 disableRipple
               >
                 {page}
@@ -225,4 +258,4 @@ const NavBar = () => {
     </AppBar>
   );
 };
-export default React.memo(NavBar);
+export default NavBar;
