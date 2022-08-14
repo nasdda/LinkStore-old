@@ -13,7 +13,6 @@ const session = require('express-session')
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var auth = require('./routes/auth')
-var secureRoute = require('./routes/secure-route')
 
 
 

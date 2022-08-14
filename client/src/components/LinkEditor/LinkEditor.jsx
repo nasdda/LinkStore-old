@@ -15,16 +15,10 @@ import { selectTags } from '../../redux/slice/slice';
 
 
 const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
-  console.log("adding new link", {
-    url: linkTitle,
-    title: linkURL,
-    tags: linkTags,
-    description: linkDescription
-  })
   await axios.post(`/user/link`, {
     link: {
-      url: linkTitle,
-      title: linkURL,
+      title: linkTitle,
+      url: linkURL,
       tags: linkTags,
       description: linkDescription
     }
@@ -59,7 +53,12 @@ function LinkEditor(props) {
         finalTags.push(tag)
       }
     })
-    postNewLink(title, url, finalTags, description)
+    postNewLink(title, url, finalTags, description).then(() => {
+      setTitle("")
+      setURL("")
+      setSelectedTags([])
+      setDescription("")
+    })
   }
 
   return (
