@@ -13,31 +13,60 @@ const textColorFromBG = (backgroundColor) => {
   return `rgb(${d}, ${d}, ${d})`
 }
 
-const Tag = (props) => {
-  const color = textColorFromBG(props.backgroundColor)
-  return (
-    <Chip
-      label={props.label}
-      size="small"
-      onClick={() => { props.onClick(props.label) }}
-      style={{
-        backgroundColor: props.backgroundColor,
-        color: color,
-        maxWidth: 150,
-        ...props.style
-      }}
-      sx={{
-        '& .MuiChip-deleteIcon': {
+const Tag = ({
+  backgroundColor, label, style,
+  onDelete, onClick, clickable
+}) => {
+  const color = textColorFromBG(backgroundColor)
+  if (onDelete === undefined) {
+    return (
+      <Chip
+        label={label}
+        size="small"
+        onClick={() => { onClick(label) }}
+        clickable={clickable}
+        style={{
+          backgroundColor: backgroundColor,
           color: color,
-          '&:hover': {
-            color: '#828282'
-          }
-        },
-      }}
-      onDelete={props.onDelete}
-      clickable={props.clickable}
-    />
-  )
+          maxWidth: 150,
+          ...style
+        }}
+        sx={{
+          '& .MuiChip-deleteIcon': {
+            color: color,
+            '&:hover': {
+              color: '#828282'
+            }
+          },
+        }}
+      />
+    )
+  } else {
+    return (
+      <Chip
+        label={label}
+        size="small"
+        onClick={() => { onClick(label) }}
+        clickable={clickable}
+        style={{
+          backgroundColor: backgroundColor,
+          color: color,
+          maxWidth: 150,
+          ...style
+        }}
+        sx={{
+          '& .MuiChip-deleteIcon': {
+            color: color,
+            '&:hover': {
+              color: '#828282'
+            }
+          },
+        }}
+        onDelete={() => { onDelete(label) }}
+      />
+    )
+  }
+
 }
 
 export default Tag

@@ -10,26 +10,56 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { TagSelector } from '../common/TagSelector/TagSelector';
+import { useSelector } from 'react-redux';
+import { selectTags } from '../../redux/slice/slice';
 
 
+const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
+  console.log("adding new link", {
+    url: linkTitle,
+    title: linkURL,
+    tags: linkTags,
+    description: linkDescription
+  })
+  await axios.post(`/user/link`, {
+    link: {
+      url: linkTitle,
+      title: linkURL,
+      tags: linkTags,
+      description: linkDescription
+    }
+  }, { withCredentials: true })
+}
 
 function LinkEditor(props) {
 
   const [title, setTitle] = React.useState("")
   const [url, setURL] = React.useState("")
+  const [selectedTags, setSelectedTags] = React.useState([])
+  const [description, setDescription] = React.useState("")
 
-  const postNewLink = async (linkTitle, linkURL, linkTags) => {
-    await axios.post(`/user/link`, {
-      link: {
-        url: linkTitle,
-        title: linkURL,
-        tags: linkTags
-      }
-    }, { withCredentials: true })
+  const tags = useSelector(selectTags)
+
+  const selectTag = (tagLabel) => {
+    setSelectedTags([...selectedTags, tagLabel])
   }
+
+  const unselectTag = (tagLabel) => {
+    selectedTags.splice(selectedTags.indexOf(tagLabel), 1)
+    setSelectedTags([...selectedTags])
+  }
+
+
 
   const onFormSubmit = e => {
     e.preventDefault()
+    const finalTags = []
+    tags.forEach(tag => {
+      if (selectedTags.includes(tag.label)) {
+        finalTags.push(tag)
+      }
+    })
+    postNewLink(title, url, finalTags, description)
   }
 
   return (
@@ -55,12 +85,22 @@ function LinkEditor(props) {
 
         <Form.Group className="mb-3" >
           <Form.Label>Tags</Form.Label>
-          <TagSelector />
+          <TagSelector
+            selectTag={selectTag}
+            selectedTags={selectedTags}
+            unselectTag={unselectTag}
+          />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
-          <Form.Control as="textarea" rows={3} placeholder="Add description..." />
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Add description..."
+            value={description}
+            onChange={e => { setDescription(e.target.value) }}
+          />
         </Form.Group>
 
 

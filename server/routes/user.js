@@ -16,7 +16,7 @@ router.get('/', async function (req, res) {
 /* GET links of user with given uuid*/
 router.get('/links/:uuid', async (req, res) => {
   if (req.params.uuid != req.user.uuid) {
-    return res.status(401).json({ message: "Private Links" })
+    return res.status(403).json({ message: "Private Links" })
   }
   try {
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
@@ -40,10 +40,19 @@ router.post('/link', async (req, res) => {
   } catch (err) {
     return res.json({ success: false })
   }
-
-
 })
 
+router.post('/tag', async (req, res) => {
+  try {
+    await UserLinks.updateOne(
+      { uuid: req.user.uuid },
+      { $push: { tags: req.body.tag } },
+    )
+    return res.json({ success: true })
+  } catch (err) {
+    return res.json({ success: false })
+  }
+})
 
 /* POST logout of current user*/
 router.post('/logout', (req, res) => {

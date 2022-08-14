@@ -14,6 +14,7 @@ import Tag from '../Tag/Tag'
 import { useDispatch } from 'react-redux';
 import { addTag } from '../../../redux/slice/slice';
 
+import axios from 'axios'
 
 export default function TagCreateModal(props) {
   const [tagLabel, setTagLabel] = React.useState("")
@@ -21,20 +22,30 @@ export default function TagCreateModal(props) {
 
   const dispatch = useDispatch()
 
-  
 
-  const handleAdd = () => {
+
+  const handleAdd = async () => {
     if (props.labelExists(tagLabel)) {
       return window.alert(`Tag with label "${tagLabel}" already exists`)
-    } 
-    if (tagLabel !== "") {
-
+    }
+    if (tagLabel.trim().length > 0) {
       dispatch(addTag({
         tag: {
           label: tagLabel,
           backgroundColor: color
         }
       }))
+      try {
+        const resp = await axios.post(`/user/tag`, {
+          tag: {
+            label: tagLabel,
+            backgroundColor: color
+          }
+        }, { withCredentials: true })
+        console.log(resp)
+      } catch (err) {
+        console.log(err)
+      }
 
       setTagLabel("")
       setColor("#000000")

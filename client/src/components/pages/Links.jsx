@@ -13,7 +13,6 @@ function Links(props) {
     axios.get(`/user/links/${params.uuid}`, {}, { withCredentials: true }).then(resp => {
       dispatch(setLinks({ links: resp.data.links }))
       dispatch(setTags({tags: resp.data.tags}))
-      console.log('links data: ', resp.data)
     }).catch(err => {
       console.log(err)
     })
