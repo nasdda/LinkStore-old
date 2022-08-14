@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 import '../../bootstrap/bootstrap.min.css'
 
@@ -15,34 +15,50 @@ import { TagSelector } from '../common/TagSelector/TagSelector';
 
 function LinkEditor(props) {
 
-  const handleCreate = async () => {
+  const [title, setTitle] = React.useState("")
+  const [url, setURL] = React.useState("")
+
+  const postNewLink = async (linkTitle, linkURL, linkTags) => {
     await axios.post(`/user/link`, {
       link: {
-        url: 'https://stackoverflow.com/questions/33049707/push-items-into-mongo-array-via-mongoose',
-        title: "stack overflow"
+        url: linkTitle,
+        title: linkURL,
+        tags: linkTags
       }
     }, { withCredentials: true })
   }
 
+  const onFormSubmit = e => {
+    e.preventDefault()
+  }
+
   return (
     <Container maxWidth="sm">
-      <Form>
-        <Form.Group className="mb-3" controlId="formGridEmail">
-          <Form.Label>Name</Form.Label>
-          <Form.Control placeholder="Name" required />
+      <Form onSubmit={onFormSubmit}>
+        <Form.Group className="mb-3" >
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            value={title}
+            onChange={e => { setTitle(e.target.value) }}
+            placeholder="Title"
+            required />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formGridAddress1">
+        <Form.Group className="mb-3" >
           <Form.Label>URL</Form.Label>
-          <Form.Control placeholder="https://example.com" required />
+          <Form.Control
+            value={url}
+            onChange={e => { setURL(e.target.value) }}
+            placeholder="https://example.com"
+            required />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formTags">
+        <Form.Group className="mb-3" >
           <Form.Label>Tags</Form.Label>
           <TagSelector />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
           <Form.Control as="textarea" rows={3} placeholder="Add description..." />
         </Form.Group>

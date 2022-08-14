@@ -13,17 +13,31 @@ const textColorFromBG = (backgroundColor) => {
   return `rgb(${d}, ${d}, ${d})`
 }
 
-export const Tag = (props) => {
+const Tag = (props) => {
   const color = textColorFromBG(props.backgroundColor)
   return (
-    <>
-      <Chip
-        label={props.label}
-        size="small"
-        onClick={() => { props.onClick(props.label) }}
-        style={{ backgroundColor: props.backgroundColor, color: color, ...props.style }}
-        clickable
-      />
-    </>
+    <Chip
+      label={props.label}
+      size="small"
+      onClick={() => { props.onClick(props.label) }}
+      style={{
+        backgroundColor: props.backgroundColor,
+        color: color,
+        maxWidth: 150,
+        ...props.style
+      }}
+      sx={{
+        '& .MuiChip-deleteIcon': {
+          color: color,
+          '&:hover': {
+            color: '#828282'
+          }
+        },
+      }}
+      onDelete={props.onDelete}
+      clickable={props.clickable}
+    />
   )
 }
+
+export default Tag
