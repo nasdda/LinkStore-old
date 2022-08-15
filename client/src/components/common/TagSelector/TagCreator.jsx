@@ -48,7 +48,6 @@ export default function TagCreateModal(props) {
       }
 
       setTagLabel("")
-      setColor("#000000")
     }
   }
 
@@ -84,7 +83,7 @@ export default function TagCreateModal(props) {
               <Button
                 variant="primary"
                 type="button"
-                style={{ width: "5rem", marginRight: "10px" }}
+                style={{ width: "4rem", marginRight: "10px" }}
                 onClick={handleAdd}
               >
                 Add
