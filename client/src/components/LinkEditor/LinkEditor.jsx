@@ -54,10 +54,7 @@ function LinkEditor(props) {
       }
     })
     postNewLink(title, url, finalTags, description).then(() => {
-      setTitle("")
-      setURL("")
-      setSelectedTags([])
-      setDescription("")
+      window.location.reload(false)
     })
   }
 

@@ -17,7 +17,7 @@ function App() {
       withCredentials: true
     })
     if (resp.data.success) {
-      window.location.reload(false);
+      window.location.reload(false)
     }
   }
 

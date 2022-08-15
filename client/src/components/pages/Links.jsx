@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import LinksContainer from '../LinksContainer/LinksContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLinks, setLinks, setTags } from '../../redux/slice/slice';
+import { Typography } from '@mui/material';
+
 
 function Links(props) {
   const params = useParams()
@@ -20,7 +22,24 @@ function Links(props) {
   }, [])
   return (
     <>
-      <LinksContainer links={links} />
+      {
+        links.length == 0 ?
+          <div
+            style={{
+              fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: '2rem',
+              fontWeight: 'bold',
+              fontSize: '2rem',
+              color: 'rgb(196, 196, 196)',
+              userSelect: 'none'
+            }}
+          >
+            No links yet</div> :
+          <LinksContainer links={links} />
+      }
     </>
   )
 }

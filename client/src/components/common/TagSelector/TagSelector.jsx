@@ -10,7 +10,7 @@ import axios from 'axios'
 
 // props should contain an addTag to add selected tag
 export const TagSelector = ({ selectTag, selectedTags, unselectTag }) => {
-  const [openTagCreator, SetOpenTagCreator] = React.useState(false)
+  const [openTagCreator, setOpenTagCreator] = React.useState(false)
   const tags = useSelector(selectTags)
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
@@ -33,7 +33,7 @@ export const TagSelector = ({ selectTag, selectedTags, unselectTag }) => {
   }
 
   const handleToggleTagCreator = () => {
-    SetOpenTagCreator(!openTagCreator)
+    setOpenTagCreator(!openTagCreator)
   }
   return (
     <div>
