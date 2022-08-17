@@ -4,14 +4,14 @@ import '../../bootstrap/bootstrap.min.css'
 
 import axios from 'axios'
 
-import Container from '@mui/material/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { TagSelector } from '../common/TagSelector/TagSelector';
-import { useSelector } from 'react-redux';
-import { selectTags } from '../../redux/slice/slice';
+import Container from '@mui/material/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import { TagSelector } from '../common/TagSelector/TagSelector'
+import { useSelector } from 'react-redux'
+import { selectTags } from '../../redux/slice/slice'
 
 
 const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
@@ -85,6 +85,7 @@ function LinkEditor(props) {
             selectTag={selectTag}
             selectedTags={selectedTags}
             unselectTag={unselectTag}
+            insertable
           />
         </Form.Group>
 

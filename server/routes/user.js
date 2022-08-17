@@ -20,7 +20,6 @@ router.get('/links/:uuid', async (req, res) => {
   }
   try {
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
-    console.log(userLinks)
     return res.status(200).json({
       links: userLinks.links,
       tags: userLinks.tags
@@ -42,6 +41,7 @@ router.post('/link', async (req, res) => {
   }
 })
 
+/* POST new tag for the current link collection */
 router.post('/tag', async (req, res) => {
   try {
     await UserLinks.updateOne(

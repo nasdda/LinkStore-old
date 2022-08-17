@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from '@mui/material/Icon';
+import Icon from '@mui/material/Icon'
 
 
 function LinkIcon(props) {
@@ -10,7 +10,7 @@ function LinkIcon(props) {
     }}>
       <img style={{ height: '100%' }} src="/link.png" alt="icon" />
     </Icon>
-  );
+  )
 }
 
 export default LinkIcon

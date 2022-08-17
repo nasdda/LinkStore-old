@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
 import axios from 'axios';
-import { useSelector } from 'react-redux'
-import { selectUser, setUser } from './redux/slice/slice'
-import { Routes, Route, Link } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import {  setUser } from './redux/slice/slice'
+import { Routes, Route } from "react-router-dom";
 import Links from './components/pages/Links';
 import Home from './components/pages/Home';
 import Create from './components/pages/Create';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const user = useSelector(selectUser)
+  const dispatch = useDispatch()
   const handleCallbackResponse = async (resp) => {
     resp = await axios.post('/auth/google-login', {}, {
       headers: { Authorization: `Bearer ${resp.credential}` },
@@ -22,6 +25,10 @@ function App() {
   }
 
   useEffect(() => {
+    axios.get('/user', {}, { withCredentials: true }).then(resp => {
+      console.log(resp)
+      dispatch(setUser({ user: resp.data.user }))
+    })
     /* global google */
     google.accounts.id.initialize({
       client_id: process.env.REACT_APP_CLIENT_ID,
@@ -41,7 +48,10 @@ function App() {
         <Route path="/links/:uuid" element={<Links />} />
         <Route path="/create" element={<Create />} />
       </Routes>
-
+      <ToastContainer
+        autoClose={3000}
+        hideProgressBar={true}
+      />
     </div>
   );
 }

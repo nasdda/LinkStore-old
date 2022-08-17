@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SliderPicker } from 'react-color'
 
-import Form from 'react-bootstrap/Form';
+import Form from 'react-bootstrap/Form'
 
 function ColorPicker({ onComplete }) {
   const [hex, setHex] = React.useState('#000000')

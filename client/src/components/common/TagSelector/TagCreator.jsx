@@ -1,18 +1,18 @@
-import * as React from 'react';
+import * as React from 'react'
 
 import '../../../bootstrap/bootstrap.min.css'
 
-import Button from 'react-bootstrap/Button';
-import Collapse from 'react-bootstrap/Collapse';
-import Container from '@mui/material/Container';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import ColorPicker from './ColorPicker';
+import Button from 'react-bootstrap/Button'
+import Collapse from 'react-bootstrap/Collapse'
+import Container from '@mui/material/Container'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import ColorPicker from './ColorPicker'
 
 import Tag from '../Tag/Tag'
-import { useDispatch } from 'react-redux';
-import { addTag } from '../../../redux/slice/slice';
+import { useDispatch } from 'react-redux'
+import { addTag } from '../../../redux/slice/slice'
 
 import axios from 'axios'
 
@@ -101,5 +101,5 @@ export default function TagCreateModal(props) {
         </Form.Group>
       </Container>
     </Collapse>
-  );
+  )
 }

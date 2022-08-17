@@ -24,7 +24,6 @@ router.post("/google-login",
         audience: process.env.CLIENT_ID,
       })
       const payload = ticket.getPayload()
-      console.log('google client payload: ', payload)
 
       let user = await User.findOne({ email: payload.email })
       if (!user) {

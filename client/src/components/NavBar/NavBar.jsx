@@ -1,87 +1,57 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import * as React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import Container from '@mui/material/Container'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import MenuItem from '@mui/material/MenuItem'
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser, setUser } from '../../redux/slice/slice'
 
 
-import axios from 'axios';
-import LinkIcon from './LinkIcon';
+import axios from 'axios'
+import LinkIcon from './LinkIcon'
 
-const pages = ["Explore", "Links", "Create"];
-const settings = ['Account', 'Logout'];
-
-const muiSX = {
-  logo: {
-    textDecoration: "none",
-    '&:hover': {
-      color: "inherit",
-      textDecoration: "none"
-    }
-  },
-  root: {
-    border: "none",
-    outline: "none",
-    '&:focus': {
-      border: "none",
-      outline: "none",
-    },
-    '&:hover': {
-      backgroundColor: "grey"
-    }
-  }
-}
+const pages = ["Explore", "Links", "Create"]
+const settings = ['Account', 'Logout']
 
 
 const NavBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState(null)
+  const [anchorElUser, setAnchorElUser] = React.useState(null)
   const user = useSelector(selectUser)
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  React.useEffect(() => {
-    axios.get('/user', {}, { withCredentials: true }).then(resp => {
-      console.log(resp)
-      dispatch(setUser({ user: resp.data.user }))
-    }).catch(err => {
-      console.log(err)
-    })
-  }, [])
 
   const settingHandlers = {
     'Account': () => {
-      setAnchorElUser(null);
+      setAnchorElUser(null)
     },
     'Logout': async () => {
       try {
         await axios.post('/user/logout', {}, { withCredentials: true })
-        setAnchorElUser(null);
+        setAnchorElUser(null)
       } catch (err) {
         console.log(err)
       } finally {
         navigate('/')
-        window.location.reload(false);
+        window.location.reload(false)
       }
 
     },
   }
 
   const pageHandlers = {
-    "Explore": () => { setAnchorElNav(null); },
+    "Explore": () => { setAnchorElNav(null) },
     "Links": () => {
       navigate(`/links/${user.uuid}`)
       setAnchorElNav(null)
@@ -124,7 +94,7 @@ const NavBar = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={event => { setAnchorElNav(event.currentTarget); }}
+              onClick={event => { setAnchorElNav(event.currentTarget) }}
               color="inherit"
             >
               <MenuIcon />
@@ -142,7 +112,7 @@ const NavBar = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={() => { setAnchorElNav(null); }}
+              onClose={() => { setAnchorElNav(null) }}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
@@ -204,7 +174,7 @@ const NavBar = () => {
           {user ?
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={(event) => { setAnchorElUser(event.currentTarget); }} sx={{ p: 0 }}>
+                <IconButton onClick={(event) => { setAnchorElUser(event.currentTarget) }} sx={{ p: 0 }}>
                   <Avatar>
                     <img referrerPolicy="no-referrer" alt="avatar" src={user.picture} style={{ height: "100%" }} />
                   </Avatar>
@@ -239,6 +209,6 @@ const NavBar = () => {
         </Toolbar>
       </Container>
     </AppBar>
-  );
-};
-export default NavBar;
+  )
+}
+export default NavBar

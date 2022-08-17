@@ -13,7 +13,6 @@ passport.use(new JwtStrategy({
     jwtFromRequest: cookieExtractor,
     secretOrKey: process.env.JWT_SECRET_KEY
 }, function(jwt_payload, done) {
-    console.log(JSON.stringify(jwt_payload.user))
     User.findOne({email: jwt_payload.user.email}, async function(err, user) {
         if (err) {
             return done(err, false);
