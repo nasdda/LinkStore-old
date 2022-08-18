@@ -8,22 +8,27 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 
 
-export default function SearchBar({ value, onChange, handleSearch }) {
+export default function SearchBar({ handleSearch }) {
+  const [value, setValue] = React.useState("")
 
   return (
-    <Row className="mb-4 d-flex justify-content-center">
+    <Form
+      onSubmit={e => {
+        e.preventDefault()
+        handleSearch(value)
+      }}
+      className="mb-4 d-flex justify-content-center">
       <Form.Control
         placeholder="Search"
         value={value}
         className="col-md-6"
-        onChange={onChange}
+        onChange={event => setValue(event.target.value)}
       />
       <Button
         variant="primary"
         className='col-md-1'
-        type="button"
-        onClick={handleSearch}
+        type="submit"
       ><i className="fa fa-search" /></Button>
-    </Row>
+    </Form>
   )
 }

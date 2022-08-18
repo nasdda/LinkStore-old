@@ -15,35 +15,54 @@ import { TagSelector } from '../common/TagSelector/TagSelector'
 function LinksContainer({ links }) {
 
   const [selectedTags, setSelectedTags] = React.useState([])
+  const [searchValue, setSearchValue] = React.useState("")
 
   const selectTag = (tagLabel) => {
     setSelectedTags([...selectedTags, tagLabel])
   }
 
+
   const unselectTag = (tagLabel) => {
     selectedTags.splice(selectedTags.indexOf(tagLabel), 1)
     setSelectedTags([...selectedTags])
   }
+
+  const handleSearch = (value) => {
+    setSearchValue(value)
+  }
+
   let renderLinks = links
 
   // filter by tags
-  if(selectedTags.length !== 0) {
+  if (selectedTags.length !== 0) {
     renderLinks = links.filter(link => {
-      for(const label of selectedTags) {
+      for (const label of selectedTags) {
         let found = false
-        for(const linkTag of link.tags) {
-          if(linkTag.label === label) {
+        for (const linkTag of link.tags) {
+          if (linkTag.label === label) {
             found = true
             break
           }
         }
-        if(!found) {
+        if (!found) {
           return false
         }
       }
       return true
     })
     console.log("AFTER FILTER", renderLinks)
+  }
+
+  // finter by keyword
+  if (searchValue.trim().length !== 0) {
+    let keyword = searchValue.trim().toLowerCase()
+    renderLinks = renderLinks.filter(link => {
+      let regex = new RegExp(keyword, "i")
+      if(regex.test(link.title) || regex.test(link.url) || regex.test(link.description)) {
+        return true
+      }
+      return false
+    })
   }
 
   return (
@@ -53,7 +72,9 @@ function LinksContainer({ links }) {
         marginTop: "2rem"
       }}
     >
-      <SearchBar />
+      <SearchBar
+        handleSearch={handleSearch}
+      />
       <div
         style={{
           width: "100%",

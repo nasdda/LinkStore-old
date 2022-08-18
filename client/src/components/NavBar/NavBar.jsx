@@ -14,14 +14,14 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { useNavigate } from "react-router-dom"
 
-import { useDispatch, useSelector } from 'react-redux'
-import { selectUser, setUser } from '../../redux/slice/slice'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../redux/slice/slice'
 
 
 import axios from 'axios'
 import LinkIcon from './LinkIcon'
 
-const pages = ["Explore", "Links", "Create"]
+const pages = ["Home", "Links", "Create"]
 const settings = ['Account', 'Logout']
 
 
@@ -51,7 +51,7 @@ const NavBar = () => {
   }
 
   const pageHandlers = {
-    "Explore": () => { setAnchorElNav(null) },
+    "Home": () => { setAnchorElNav(null) },
     "Links": () => {
       navigate(`/links`)
       setAnchorElNav(null)
