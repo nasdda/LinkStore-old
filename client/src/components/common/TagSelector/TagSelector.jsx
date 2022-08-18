@@ -9,8 +9,8 @@ import TagCreator from './TagCreator'
 import axios from 'axios'
 
 // props should contain an addTag to add selected tag
-export const TagSelector = ({ selectTag, selectedTags, unselectTag, insertable }) => {
-  const [openTagCreator, setOpenTagCreator] = React.useState(false)
+export const TagSelector = ({ selectTag, selectedTags,
+  unselectTag, insertable, openTagCreator, setOpenTagCreator }) => {
   const tags = useSelector(selectTags)
 
   const tagLabels = tags.map(tag => tag.label)

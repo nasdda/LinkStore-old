@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row'
 import { TagSelector } from '../common/TagSelector/TagSelector'
 import { useSelector } from 'react-redux'
 import { selectTags } from '../../redux/slice/slice'
+import { toast } from 'react-toastify'
 
 
 const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
@@ -31,6 +32,7 @@ function LinkEditor(props) {
   const [url, setURL] = React.useState("")
   const [selectedTags, setSelectedTags] = React.useState([])
   const [description, setDescription] = React.useState("")
+  const [openTagCreator, setOpenTagCreator] = React.useState(false)
 
   const tags = useSelector(selectTags)
 
@@ -54,7 +56,14 @@ function LinkEditor(props) {
       }
     })
     postNewLink(title, url, finalTags, description).then(() => {
-      window.location.reload(false)
+      setTitle("")
+      setURL("")
+      setSelectedTags([])
+      setDescription("")
+      setOpenTagCreator(false)
+      toast.success("New link created", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
     })
   }
 
@@ -85,6 +94,8 @@ function LinkEditor(props) {
             selectTag={selectTag}
             selectedTags={selectedTags}
             unselectTag={unselectTag}
+            openTagCreator={openTagCreator}
+            setOpenTagCreator={setOpenTagCreator}
             insertable
           />
         </Form.Group>

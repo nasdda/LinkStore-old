@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 
 const User = require('../models/userModel')
-const UserLinks = require('../models/userLinksModel')
+const UserLinks = require('../models/userLinksModel');
+const { response } = require('express');
 
 
 /* GET current user. */
@@ -37,7 +38,38 @@ router.post('/link', async (req, res) => {
     )
     return res.json({ success: true })
   } catch (err) {
-    return res.json({ success: false })
+    return res.status(400)
+  }
+})
+
+/* GET links of current user*/
+router.get('/links', async (req, res) => {
+  try {
+    userLinks = await UserLinks.findOne({ uuid: req.user.uuid })
+    return res.status(200).json({
+      links: userLinks.links,
+      tags: userLinks.tags
+    })
+  } catch (err) {
+    return res.status(400)
+  }
+})
+
+
+router.delete('/link', async (req, res) => {
+  try {
+    console.log("DELETING: ", req.body.deleteUid)
+    await UserLinks.updateOne(
+      { uuid: req.user.uuid },
+      {
+        $pull: {
+          links: { _id: req.body.deleteUid }
+        }
+      }
+    )
+    res.json({ success: true })
+  } catch (err) {
+    res.json.status(400)
   }
 })
 
@@ -50,7 +82,7 @@ router.post('/tag', async (req, res) => {
     )
     return res.json({ success: true })
   } catch (err) {
-    return res.json({ success: false })
+    return res.status(400)
   }
 })
 

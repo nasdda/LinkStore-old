@@ -16,7 +16,6 @@ router.post("/google-login",
       return res.status(401).json({ error: "No credentials" })
     }
     const jwtToken = req.headers.authorization.split(' ')[1]
-    console.log("JWT IS: ", jwtToken)
     try {
       // verify google identity
       const ticket = await client.verifyIdToken({

@@ -10,9 +10,13 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Tag from '../common/Tag/Tag'
 import { Divider } from '@mui/material'
 import { toast } from 'react-toastify'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { deleteLink } from '../../redux/slice/slice'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
@@ -30,9 +34,28 @@ const ExpandMore = styled((props) => {
   }),
 }))
 
-function LinkCard({ title, url, tags, description }) {
-  const [expanded, setExpanded] = React.useState(false)
+const DeleteLink = async (id, dispatch) => {
+  await axios.delete(`/user/link`, {
+    data: {
+      deleteUid: id
+    }
+  }, { withCredentials: true }).then(resp => {
+    if (resp.data.success) {
+      dispatch(deleteLink({ id: id }))
+      toast.success("Link deleted", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    } else {
+      toast.error("Failed to delete link", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    }
+  })
+}
 
+function LinkCard({ title, url, tags, description, id }) {
+  const [expanded, setExpanded] = React.useState(false)
+  const dispatch = useDispatch()
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
@@ -46,19 +69,38 @@ function LinkCard({ title, url, tags, description }) {
       maxWidth: 350,
       wordBreak: 'break-word',
     }}>
-      <a href={url} rel="noreferrer" target="_blank">
-        <CardHeader
-          title={title}
-          sx={{
-            paddingBottom: 0
+
+      <CardHeader
+        title={
+          <a href={url} rel="noreferrer" target="_blank">
+            {title}
+          </a>
+        }
+        action={
+          <IconButton aria-label="add to favorites" sx={{
+            '&:focus': {
+              border: "none",
+              outline: "none",
+            },
           }}
-          titleTypographyProps={{ variant: 'h6' }}
-        />
-      </a>
+            onClick={() => {
+              DeleteLink(id, dispatch)
+            }}
+          >
+            <DeleteOutlineIcon />
+          </IconButton>
+        }
+        sx={{
+          paddingBottom: 0
+        }}
+        titleTypographyProps={{ variant: 'h6' }}
+      />
+
 
       <CardContent>
         {tags.map(tag => (
           <Tag
+            key={tag._id}
             label={tag.label}
             backgroundColor={tag.backgroundColor}
             style={{ marginRight: "5px" }}
@@ -89,21 +131,6 @@ function LinkCard({ title, url, tags, description }) {
         >
           <ExpandMoreIcon />
         </ExpandMore>
-
-        <IconButton aria-label="add to favorites" sx={{
-          '&:focus': {
-            border: "none",
-            outline: "none",
-          },
-        }}
-          onClick={() => {
-            navigator.clipboard.writeText(url).then(() => {
-              notifyCopied()
-            })
-          }}
-        >
-          <ContentCopyIcon />
-        </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Divider />

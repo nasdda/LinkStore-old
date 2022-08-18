@@ -46,6 +46,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/links/:uuid" element={<Links />} />
+        <Route path="/links" element={<Links />} />
         <Route path="/create" element={<Create />} />
       </Routes>
       <ToastContainer

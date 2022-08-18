@@ -20,6 +20,16 @@ export const slice = createSlice({
     setLinks: (state, action) => {
       state.links = [...action.payload.links]
     },
+    deleteLink: (state, action) => {
+      const newLinks = []
+      for(let i = 0 ; i < state.links.length; i++){
+        if (state.links[i]._id === action.payload.id){
+          continue
+        }
+        newLinks.push(state.links[i])
+      }
+      state.links = newLinks
+    },
     addTag: (state, action) => {
       state.tags.push(action.payload.tag)
       state.tags = [...state.tags]
@@ -32,7 +42,8 @@ export const {
   setUser,
   setTags,
   setLinks,
-  addTag
+  addTag,
+  deleteLink
 } = slice.actions
 
 export const selectUser = state => state.main.user

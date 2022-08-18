@@ -53,7 +53,7 @@ const NavBar = () => {
   const pageHandlers = {
     "Explore": () => { setAnchorElNav(null) },
     "Links": () => {
-      navigate(`/links/${user.uuid}`)
+      navigate(`/links`)
       setAnchorElNav(null)
     },
     "Create": () => {
