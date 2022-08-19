@@ -17,8 +17,10 @@ router.get('/', async function (req, res) {
 /* GET links of user with given uuid*/
 router.get('/links/:uuid', async (req, res) => {
   try {
+    console.log(req.params.uuid)
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
-    if (!userLinks.public || req.params.uuid != req.user.uuid) {
+    console.log(userLinks)
+    if (!userLinks.public && req.params.uuid != req.user.uuid) {
       return res.status(403).json({ message: "Private Links" })
     }
     return res.status(200).json({
@@ -26,6 +28,7 @@ router.get('/links/:uuid', async (req, res) => {
       tags: userLinks.tags
     })
   } catch (err) {
+    console.log(err)
     return res.status(400).json({ message: err })
   }
 })

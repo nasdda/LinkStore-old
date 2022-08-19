@@ -56,7 +56,7 @@ function LinksContainer({ links }) {
     let keyword = searchValue.trim().toLowerCase()
     renderLinks = renderLinks.filter(link => {
       let regex = new RegExp(keyword, "i")
-      if(regex.test(link.title) || regex.test(link.url) || regex.test(link.description)) {
+      if (regex.test(link.title) || regex.test(link.url) || regex.test(link.description)) {
         return true
       }
       return false
@@ -106,7 +106,7 @@ function LinksContainer({ links }) {
         >
           {renderLinks.map((link, i) => (
             <LinkCard
-              key={i}
+              key={link._id}
               title={link.title}
               url={link.url}
               tags={link.tags}

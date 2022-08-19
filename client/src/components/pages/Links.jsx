@@ -23,7 +23,11 @@ function Links(props) {
         dispatch(setTags({ tags: resp.data.tags }))
         setLoading(false)
       }).catch(err => {
-        setEmptyText("Please Sign In")
+        if (err.response.status === 403) {
+          setEmptyText("Private Collection")
+        } else {
+          setEmptyText("Please Sign In")
+        }
         setLoading(false)
       })
   }, [user])

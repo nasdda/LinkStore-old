@@ -43,8 +43,6 @@ function LinkEditor(props) {
     setSelectedTags([...selectedTags])
   }
 
-
-
   const onFormSubmit = e => {
     e.preventDefault()
     const finalTags = []

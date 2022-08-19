@@ -17,6 +17,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { deleteLink } from '../../redux/slice/slice'
 
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <Tooltip title={expand ? "hide description" : "show description"}>
@@ -26,7 +27,7 @@ const ExpandMore = styled((props) => {
         outline: "none",
       },
     }} {...other} />
-  </Tooltip >
+  </Tooltip>
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
@@ -79,7 +80,7 @@ function LinkCard({ title, url, tags, description, id }) {
         }
         action={
           <Tooltip title="delete">
-            <IconButton aria-label="add to favorites" sx={{
+            <IconButton aria-label="delete" sx={{
               '&:focus': {
                 border: "none",
                 outline: "none",

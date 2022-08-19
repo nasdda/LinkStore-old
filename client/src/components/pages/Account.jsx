@@ -55,7 +55,7 @@ const AccountCard = ({ user }) => {
   ]
 
   const Contents = () => (
-    <Card sx={{ minWidth: 275, height: 350 }}>
+    <Card sx={{ minWidth: 275, height: 320 }}>
       <CenteredDiv>
         <Avatar
           alt="profile picture"
@@ -88,7 +88,6 @@ const AccountCard = ({ user }) => {
               })}
               options={options}
               onChange={selected => {
-                console.log(selected)
                 setDisabled(true)
                 axios.patch('/user/link/visibility',
                   { public: selected.value === 'public' },

@@ -18,6 +18,7 @@ export default function Create(props) {
         dispatch(setTags({ tags: resp.data.tags }))
         setLoading(false)
       }).catch(err => {
+        setLoading(false)
         console.log(err)
       })
   }, [])

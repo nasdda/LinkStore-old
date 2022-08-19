@@ -17,13 +17,11 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../redux/slice/slice'
 
-
 import axios from 'axios'
 import LinkIcon from './LinkIcon'
 
 const pages = ["Home", "Links", "Create"]
 const settings = ['Account', 'Logout']
-
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
@@ -52,10 +50,17 @@ const NavBar = () => {
   }
 
   const pageHandlers = {
-    "Home": () => { setAnchorElNav(null) },
-    "Links": () => {
-      navigate(`/links`)
+    "Home": () => {
       setAnchorElNav(null)
+      navigate('/')
+    },
+    "Links": async () => {
+      setAnchorElNav(null)
+      if (user) {
+        navigate(`/links/${user.uuid}`)
+      } else {
+        navigate(`/links`)
+      }
     },
     "Create": () => {
       navigate('/create')
