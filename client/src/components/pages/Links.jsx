@@ -26,7 +26,6 @@ function Links(props) {
       }).catch(err => {
         setEmptyText("Please Sign In")
         setLoading(false)
-        console.log(err)
       })
   }, [user])
 

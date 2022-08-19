@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectTags, selectUser, setTags } from '../../../redux/slice/slice'
 import TagCreator from './TagCreator'
 
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
 import axios from 'axios'
+import { Chip, Tooltip } from '@mui/material'
 
 // props should contain an addTag to add selected tag
 export const TagSelector = ({ selectTag, selectedTags,
@@ -43,12 +47,22 @@ export const TagSelector = ({ selectTag, selectedTags,
       })}
       {
         insertable && <>
-          <Tag
-            label={openTagCreator ? "-" : "+"}
-            backgroundColor="#646464"
-            onClick={handleToggleTagCreator}
-            style={{ marginRight: "8px", marginBottom: "5px", width: "2rem", fontSize: "1.2rem" }}
-          />
+          <Tooltip title={openTagCreator ? "hide" : "create"} placement="right">
+            <Chip
+              variant="outlined"
+              size="small"
+              label={
+                openTagCreator ? <RemoveIcon /> : <AddIcon />
+              }
+              onClick={handleToggleTagCreator}
+              style={{
+                marginBottom: "5px",
+                backgroundColor: "#e6e6e6",
+                color: "grey"
+              }}
+            />
+          </Tooltip>
+
           <TagCreator
             labelExists={labelExists}
             open={openTagCreator}

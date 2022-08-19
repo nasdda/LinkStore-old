@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Chip from '@mui/material/Chip'
+import { FOCUSABLE_SELECTOR } from '@testing-library/user-event/dist/utils'
 
 const textColorFromBG = (backgroundColor) => {
   const R = parseInt(backgroundColor.substring(1, 3), 16)
@@ -18,13 +19,37 @@ const Tag = ({
   onDelete, onClick, clickable
 }) => {
   const color = textColorFromBG(backgroundColor)
+  if (onClick === undefined) {
+    return (
+      <Chip
+        variant="outlined"
+        label={label}
+        size="small"
+        clickable={false}
+        style={{
+          backgroundColor: backgroundColor,
+          color: color,
+          maxWidth: 150,
+          ...style
+        }}
+        sx={{
+          '& .MuiChip-deleteIcon': {
+            color: color,
+            '&:hover': {
+              color: '#828282'
+            }
+          },
+        }}
+      />
+    )
+  }
   if (onDelete === undefined) {
     return (
       <Chip
+        variant="outlined"
         label={label}
         size="small"
         onClick={() => { onClick(label) }}
-        clickable={clickable}
         style={{
           backgroundColor: backgroundColor,
           color: color,
@@ -44,10 +69,10 @@ const Tag = ({
   } else {
     return (
       <Chip
+        variant="outlined"
         label={label}
         size="small"
         onClick={() => { onClick(label) }}
-        clickable={clickable}
         style={{
           backgroundColor: backgroundColor,
           color: color,

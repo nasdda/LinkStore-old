@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import '../../../bootstrap/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Button from 'react-bootstrap/Button'
 import Collapse from 'react-bootstrap/Collapse'
@@ -15,14 +15,13 @@ import { useDispatch } from 'react-redux'
 import { addTag } from '../../../redux/slice/slice'
 
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export default function TagCreateModal(props) {
   const [tagLabel, setTagLabel] = React.useState("")
   const [color, setColor] = React.useState("#000000")
 
   const dispatch = useDispatch()
-
-
 
   const handleAdd = async () => {
     if (props.labelExists(tagLabel)) {
@@ -36,16 +35,18 @@ export default function TagCreateModal(props) {
         }
       }))
       try {
-        const resp = await axios.post(`/user/tag`, {
+        await axios.post(`/user/tag`, {
           tag: {
             label: tagLabel,
             backgroundColor: color
           }
         }, { withCredentials: true })
-        console.log(resp)
       } catch (err) {
-        console.log(err)
+        toast.error("Failed to create new tag", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        })
       }
+
 
       setTagLabel("")
     }
@@ -64,7 +65,6 @@ export default function TagCreateModal(props) {
             style={{ marginLeft: 10 }}
             label={tagLabel}
             backgroundColor={color}
-            clickable={false}
           />
         </div>
 

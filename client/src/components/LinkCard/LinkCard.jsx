@@ -12,7 +12,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Tag from '../common/Tag/Tag'
-import { Divider } from '@mui/material'
+import { Divider, Tooltip } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
@@ -20,12 +20,14 @@ import { deleteLink } from '../../redux/slice/slice'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
-  return <IconButton sx={{
-    '&:focus': {
-      border: "none",
-      outline: "none",
-    },
-  }} {...other} />
+  return <Tooltip title={expand ? "hide description" : "show description"}>
+    <IconButton sx={{
+      '&:focus': {
+        border: "none",
+        outline: "none",
+      },
+    }} {...other} />
+  </Tooltip >
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
@@ -77,18 +79,20 @@ function LinkCard({ title, url, tags, description, id }) {
           </a>
         }
         action={
-          <IconButton aria-label="add to favorites" sx={{
-            '&:focus': {
-              border: "none",
-              outline: "none",
-            },
-          }}
-            onClick={() => {
-              DeleteLink(id, dispatch)
+          <Tooltip title="delete">
+            <IconButton aria-label="add to favorites" sx={{
+              '&:focus': {
+                border: "none",
+                outline: "none",
+              },
             }}
-          >
-            <DeleteOutlineIcon />
-          </IconButton>
+              onClick={() => {
+                DeleteLink(id, dispatch)
+              }}
+            >
+              <DeleteOutlineIcon />
+            </IconButton>
+          </Tooltip>
         }
         sx={{
           paddingBottom: 0
@@ -108,21 +112,22 @@ function LinkCard({ title, url, tags, description, id }) {
         ))}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" sx={{
-          '&:focus': {
-            border: "none",
-            outline: "none",
-          },
-        }}
-          onClick={() => {
-            navigator.clipboard.writeText(url).then(() => {
-              notifyCopied()
-            })
+        <Tooltip title="copy url">
+          <IconButton sx={{
+            '&:focus': {
+              border: "none",
+              outline: "none",
+            },
           }}
-        >
-          <ContentCopyIcon />
-        </IconButton>
-
+            onClick={() => {
+              navigator.clipboard.writeText(url).then(() => {
+                notifyCopied()
+              })
+            }}
+          >
+            <ContentCopyIcon />
+          </IconButton>
+        </Tooltip>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

@@ -50,7 +50,6 @@ function LinksContainer({ links }) {
       }
       return true
     })
-    console.log("AFTER FILTER", renderLinks)
   }
 
   // finter by keyword

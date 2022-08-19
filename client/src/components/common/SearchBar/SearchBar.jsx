@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import '../../../bootstrap/bootstrap.min.css'
-import '../../../../node_modules/font-awesome/css/font-awesome.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'font-awesome/css/font-awesome.min.css'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -18,17 +18,23 @@ export default function SearchBar({ handleSearch }) {
         handleSearch(value)
       }}
       className="mb-4 d-flex justify-content-center">
-      <Form.Control
-        placeholder="Search"
-        value={value}
-        className="col-md-6"
-        onChange={event => setValue(event.target.value)}
-      />
-      <Button
-        variant="primary"
-        className='col-md-1'
-        type="submit"
-      ><i className="fa fa-search" /></Button>
+      <Row className="col-md-7">
+        <div className="input-group mb-3">
+          <Form.Control
+            placeholder="Search"
+            value={value}
+            onChange={event => setValue(event.target.value)}
+          />
+          <Button
+            variant="primary"
+            className='input-group-prepend'
+            type="submit"
+            style={{width: "5rem"}}
+          ><i className="fa fa-search" /></Button>
+        </div>
+      </Row>
+
+
     </Form>
   )
 }
