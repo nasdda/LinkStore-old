@@ -1,24 +1,130 @@
 import * as React from 'react'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../redux/slice/slice'
-import LinkEditor from '../LinkEditor/LinkEditor'
 
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { setTags } from '../../redux/slice/slice'
 import Loader from '../common/Loader/Loader'
 
-export default function Create(props) {
-  const user = useSelector(selectUser)
+import { Container, IconButton, Tooltip } from '@mui/material'
+import {
+  Card, CardContent, Avatar,
+  Typography, CardActions,
+  CardHeader
+} from '@mui/material'
+import styled from 'styled-components'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
+import Select from 'react-select'
+
+
+const CenteredDiv = ({ children }) => (
+  <div style={{
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: '1rem',
+  }}>
+    {children}
+  </div>
+)
+
+const SpacedRow = ({ children }) => (
+  <div style={{
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: '1rem'
+  }}>
+    {children}
+  </div>
+)
+
+const AccountCard = ({ user }) => {
   const [loading, setLoading] = React.useState(true)
-  const dispatch = useDispatch()
+  const [disabled, setDisabled] = React.useState(false)
+  const [value, setValue] = React.useState(undefined)
+  React.useEffect(() => {
+    axios.get('/user/link/visibility', {}, { withCredentials: true }).then(resp => {
+      setValue(resp.data.public ? "public" : "private")
+      setLoading(false)
+    })
+  }, [])
+  const options = [
+    { value: 'private', label: 'private' },
+    { value: 'public', label: 'public' },
+  ]
+
+  const Contents = () => (
+    <Card sx={{ minWidth: 275, height: 350 }}>
+      <CenteredDiv>
+        <Avatar
+          alt="profile picture"
+          src={user.picture}
+          sx={{ width: 60, height: 60 }}
+        />
+      </CenteredDiv>
+      <CenteredDiv>
+        <Typography variant='h4' style={{ color: "grey" }}>{user.name}</Typography>
+      </CenteredDiv>
+      <CardContent>
+        <SpacedRow>
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+            <Typography>Links Visibility</Typography>
+            <Tooltip title="If set to public, your links collection is viewable by anyone with the link to it.">
+              <IconButton disableRipple>
+                <InfoOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+          <div style={{ width: "200px" }}>
+            <Select
+              value={"hey"}
+              options={options}
+              onChange={selected => {
+                setDisabled(true)
+                axios.patch('/user/link/visibility',
+                  { public: selected.value === 'public' },
+                  { withCredentials: true }
+                ).then(res => {
+                  console.log(res)
+                  if (res.status === 200) {
+                    console.log(selected.value)
+                    setValue(selected.value)
+                    setDisabled(false)
+                  } else {
+                    setDisabled(false)
+                  }
+                })
+              }}
+              isDisabled={disabled}
+            />
+          </div>
+        </SpacedRow>
+      </CardContent>
+    </Card>
+  )
+  return (
+    <Container maxWidth="xs">
+      {loading ? <Loader /> : <Contents />}
+    </Container>
+  )
+}
+
+export default function Account(props) {
+  const [user, setUser] = React.useState(undefined)
+  const [loading, setLoading] = React.useState(true)
   React.useState(() => {
-    axios.get('/user/links',
+    axios.get('/user/',
       {}, { withCredentials: true }).then(resp => {
-        dispatch(setTags({ tags: resp.data.tags }))
+        setUser(resp.data.user)
         setLoading(false)
       }).catch(err => {
-        console.log(err)
+        setLoading(false)
       })
   }, [])
 
@@ -26,7 +132,7 @@ export default function Create(props) {
     <div style={{ marginTop: "2rem" }}>
       {
         loading ? <Loader /> :
-          user ? <LinkEditor /> :
+          user ? <AccountCard user={user} /> :
             <div
               style={{
                 fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
@@ -42,7 +148,6 @@ export default function Create(props) {
             >
               Please Sign In</div>
       }
-
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Chip from '@mui/material/Chip'
-import { FOCUSABLE_SELECTOR } from '@testing-library/user-event/dist/utils'
 
 const textColorFromBG = (backgroundColor) => {
   const R = parseInt(backgroundColor.substring(1, 3), 16)

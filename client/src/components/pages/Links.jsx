@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import LinksContainer from '../LinksContainer/LinksContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLinks, selectUser, setLinks, setTags } from '../../redux/slice/slice'
-import { Typography } from '@mui/material'
 import Loader from '../common/Loader/Loader'
 
 

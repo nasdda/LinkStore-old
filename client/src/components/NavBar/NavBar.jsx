@@ -35,6 +35,7 @@ const NavBar = () => {
   const settingHandlers = {
     'Account': () => {
       setAnchorElUser(null)
+      navigate('/account')
     },
     'Logout': async () => {
       try {

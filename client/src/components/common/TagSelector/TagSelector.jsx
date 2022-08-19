@@ -2,14 +2,13 @@ import * as React from 'react'
 
 import Tag from '../Tag/Tag'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { selectTags, selectUser, setTags } from '../../../redux/slice/slice'
+import { useSelector } from 'react-redux'
+import { selectTags } from '../../../redux/slice/slice'
 import TagCreator from './TagCreator'
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-import axios from 'axios'
 import { Chip, Tooltip } from '@mui/material'
 
 // props should contain an addTag to add selected tag

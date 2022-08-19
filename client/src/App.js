@@ -3,7 +3,7 @@ import './App.css';
 import NavBar from './components/NavBar/NavBar';
 import axios from 'axios';
 import { useDispatch } from 'react-redux'
-import {  setUser } from './redux/slice/slice'
+import { setUser } from './redux/slice/slice'
 import { Routes, Route } from "react-router-dom";
 import Links from './components/pages/Links';
 import Home from './components/pages/Home';
@@ -11,6 +11,7 @@ import Create from './components/pages/Create';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import Account from './components/pages/Account';
 
 function App() {
   const dispatch = useDispatch()
@@ -45,9 +46,10 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/links/:uuid" element={<Links />} />
         <Route path="/links" element={<Links />} />
+        <Route path="/links/:uuid" element={<Links />} />
         <Route path="/create" element={<Create />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
       <ToastContainer
         autoClose={3000}
