@@ -16,6 +16,7 @@ function Links(props) {
   const user = useSelector(selectUser)
   useEffect(() => {
     // fetch links to be displayed
+    setLoading(true)
     axios.get(params.uuid ? `/user/links/${params.uuid}` : '/user/links',
       {}, { withCredentials: true }).then(resp => {
         dispatch(setLinks({ links: resp.data.links }))
@@ -30,7 +31,7 @@ function Links(props) {
         }
         setLoading(false)
       })
-  }, [user])
+  }, [user, params.uuid])
 
   const Body = () => {
     return (

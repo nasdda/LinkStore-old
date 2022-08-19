@@ -7,10 +7,11 @@ import { Container, IconButton, Tooltip } from '@mui/material'
 import {
   Card, CardContent, Avatar,
   Typography, CardActions,
-  CardHeader
+  CardHeader, Chip
 } from '@mui/material'
-import styled from 'styled-components'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { toast } from 'react-toastify'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 import Select from 'react-select'
 
@@ -55,7 +56,7 @@ const AccountCard = ({ user }) => {
   ]
 
   const Contents = () => (
-    <Card sx={{ minWidth: 275, height: 320 }}>
+    <Card sx={{ minWidth: 275, height: 350 }}>
       <CenteredDiv>
         <Avatar
           alt="profile picture"
@@ -67,6 +68,31 @@ const AccountCard = ({ user }) => {
         <Typography variant='h4' style={{ color: "grey" }}>{user.name}</Typography>
       </CenteredDiv>
       <CardContent>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            marginBottom: '2rem'
+          }}
+        >
+          <Chip
+            variant="outlined"
+            label="Collection Link"
+            size="small"
+            icon={<ContentCopyIcon />}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.origin}/links/${user.uuid}`
+              ).then(
+                () => {
+                  toast.success("Copied to clipboard", {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                  })
+                })
+            }}
+          />
+        </div>
         <SpacedRow>
           <div style={{
             width: '100%',

@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux'
 import { setUser } from './redux/slice/slice'
 import { Routes, Route } from "react-router-dom";
 import Links from './components/pages/Links';
-import Home from './components/pages/Home';
 import Create from './components/pages/Create';
 import { ToastContainer } from 'react-toastify';
 
@@ -45,8 +44,7 @@ function App() {
     <div>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/links" element={<Links />} />
+        <Route path="/" element={<Links />} />
         <Route path="/links/:uuid" element={<Links />} />
         <Route path="/create" element={<Create />} />
         <Route path="/account" element={<Account />} />

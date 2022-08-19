@@ -12,7 +12,6 @@ import { TagSelector } from '../common/TagSelector/TagSelector'
 
 
 function LinksContainer({ links }) {
-
   const [selectedTags, setSelectedTags] = React.useState([])
   const [searchValue, setSearchValue] = React.useState("")
 

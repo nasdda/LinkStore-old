@@ -17,7 +17,7 @@ export default function SearchBar({ handleSearch }) {
         e.preventDefault()
         handleSearch(value)
       }}
-      className="mb-4 d-flex justify-content-center">
+      className="d-flex justify-content-center">
       <Row className="col-md-7">
         <div className="input-group mb-3">
           <Form.Control
