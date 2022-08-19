@@ -19,7 +19,8 @@ const schema = mongoose.Schema({
       label: String,
       backgroundColor: String
     }]
-  }
+  },
+  public: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User Links", schema)

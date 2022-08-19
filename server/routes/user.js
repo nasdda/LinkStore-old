@@ -16,11 +16,11 @@ router.get('/', async function (req, res) {
 
 /* GET links of user with given uuid*/
 router.get('/links/:uuid', async (req, res) => {
-  if (req.params.uuid != req.user.uuid) {
-    return res.status(403).json({ message: "Private Links" })
-  }
   try {
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
+    if (!userLinks.public || req.params.uuid != req.user.uuid) {
+      return res.status(403).json({ message: "Private Links" })
+    }
     return res.status(200).json({
       links: userLinks.links,
       tags: userLinks.tags
@@ -37,6 +37,27 @@ router.post('/link', async (req, res) => {
       { $push: { links: req.body.link } },
     )
     return res.json({ success: true })
+  } catch (err) {
+    return res.status(400)
+  }
+})
+
+router.patch('/link/visibility', async (req, res) => {
+  try {
+    await UserLinks.updateOne(
+      { uuid: req.user.uuid },
+      { $set: { public: req.body.public } },
+    )
+    return res.json({ success: true })
+  } catch (err) {
+    return res.status(400)
+  }
+})
+
+router.get('/link/visibility', async (req, res) => {
+  try {
+    const userLink = await UserLinks.findOne({ uuid: req.user.uuid })
+    return res.json({ public: userLink.public })
   } catch (err) {
     return res.status(400)
   }

@@ -83,9 +83,12 @@ const AccountCard = ({ user }) => {
           </div>
           <div style={{ width: "200px" }}>
             <Select
-              value={"hey"}
+              value={options.filter(function (option) {
+                return option.value === value;
+              })}
               options={options}
               onChange={selected => {
+                console.log(selected)
                 setDisabled(true)
                 axios.patch('/user/link/visibility',
                   { public: selected.value === 'public' },
