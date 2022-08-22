@@ -16,18 +16,19 @@ function Links(props) {
   const user = useSelector(selectUser)
   useEffect(() => {
     // fetch links to be displayed
-    setLoading(true)
     axios.get(params.uuid ? `/user/links/${params.uuid}` : '/user/links',
       {}, { withCredentials: true }).then(resp => {
         dispatch(setLinks({ links: resp.data.links }))
-        console.log("LINKS: ", resp.data.links)
         dispatch(setTags({ tags: resp.data.tags }))
         setLoading(false)
+        console.log("LINKS: ", resp.data.links)
       }).catch(err => {
         if (err.response.status === 403) {
           setEmptyText("Private Collection")
-        } else {
+        } else if(err.response.status === 401) {
           setEmptyText("Please Sign In")
+        } else {
+          setEmptyText("Collection Does Not Exist")
         }
         setLoading(false)
       })

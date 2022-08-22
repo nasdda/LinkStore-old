@@ -180,10 +180,24 @@ function LinkEditor({ link, setEdit, setEditLink }) {
           />
         </Form.Group>
 
+        <div style={{ display: 'flex' }}>
+          <Button variant="primary" type="submit">
+            {link ? 'Update' : 'Create'}
+          </Button>
+          {
+            link &&
+            <Button
+              variant="primary"
+              type="button"
+              style={{ marginLeft: "5px" }}
+              onClick={() => setEdit(false)}
+            >
+              Cancel
+            </Button>
+          }
+        </div>
 
-        <Button variant="primary" type="submit">
-          {link ? 'Update' : 'Create'}
-        </Button>
+
       </Form>
     </Container >
   )

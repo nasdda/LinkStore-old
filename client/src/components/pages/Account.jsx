@@ -14,6 +14,8 @@ import { toast } from 'react-toastify'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 import Select from 'react-select'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../redux/slice/slice'
 
 
 const CenteredDiv = ({ children }) => (
@@ -144,16 +146,10 @@ const AccountCard = ({ user }) => {
 }
 
 export default function Account(props) {
-  const [user, setUser] = React.useState(undefined)
   const [loading, setLoading] = React.useState(true)
+  const user = useSelector(selectUser)
   React.useState(() => {
-    axios.get('/user/',
-      {}, { withCredentials: true }).then(resp => {
-        setUser(resp.data.user)
-        setLoading(false)
-      }).catch(err => {
-        setLoading(false)
-      })
+    setLoading(false)
   }, [])
 
   return (

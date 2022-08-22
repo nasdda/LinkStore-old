@@ -14,7 +14,7 @@ router.get('/', async function (req, res) {
   })
 });
 
-/* GET links of user with given uuid*/
+/* GET links of user with given uuid */
 router.get('/links/:uuid', async (req, res) => {
   try {
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
@@ -30,6 +30,7 @@ router.get('/links/:uuid', async (req, res) => {
   }
 })
 
+/* POST new link */
 router.post('/link', async (req, res) => {
   try {
     await UserLinks.updateOne(
@@ -42,6 +43,7 @@ router.post('/link', async (req, res) => {
   }
 })
 
+/* PATCH the visibility of the link to either be public or private */
 router.patch('/link/visibility', async (req, res) => {
   try {
     await UserLinks.updateOne(
@@ -54,6 +56,7 @@ router.patch('/link/visibility', async (req, res) => {
   }
 })
 
+/* PATCH the contents of the link with given _id of linkID */
 router.patch('/link', async (req, res) => {
   try {
     await UserLinks.updateOne(
@@ -73,6 +76,7 @@ router.patch('/link', async (req, res) => {
   }
 })
 
+/* GET the current visibilty of the user's link collection */
 router.get('/link/visibility', async (req, res) => {
   try {
     const userLink = await UserLinks.findOne({ uuid: req.user.uuid })
@@ -95,7 +99,7 @@ router.get('/links', async (req, res) => {
   }
 })
 
-
+/* DELETE a given link with _id of req.body.deleteUid */
 router.delete('/link', async (req, res) => {
   try {
     await UserLinks.updateOne(
