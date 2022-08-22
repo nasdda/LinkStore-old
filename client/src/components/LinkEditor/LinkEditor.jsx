@@ -30,15 +30,28 @@ const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
   }, { withCredentials: true })
 }
 
-function LinkEditor(props) {
+function LinkEditor({ link }) {
 
   const [title, setTitle] = React.useState("")
   const [url, setURL] = React.useState("")
   const [selectedTags, setSelectedTags] = React.useState([])
   const [description, setDescription] = React.useState("")
   const [openTagCreator, setOpenTagCreator] = React.useState(false)
-
   const tags = useSelector(selectTags)
+
+  React.useEffect(() => {
+    // Edit mode if link is supplied
+    if (link) {
+      const editSelectedTags = []
+      for (const tag of link.tags) {
+        editSelectedTags.push(tag.label)
+      }
+      setTitle(link.title)
+      setURL(link.url)
+      setSelectedTags(editSelectedTags)
+      setDescription(link.description)
+    }
+  }, [link])
 
   const selectTag = (tagLabel) => {
     setSelectedTags([...selectedTags, tagLabel])
@@ -110,15 +123,16 @@ function LinkEditor(props) {
             placeholder="Add description..."
             value={description}
             onChange={e => { setDescription(e.target.value) }}
+            data-gramm="false"
           />
         </Form.Group>
 
 
         <Button variant="primary" type="submit">
-          Create
+          {link ? 'Update' : 'Create'}
         </Button>
       </Form>
-    </Container>
+    </Container >
   )
 }
 

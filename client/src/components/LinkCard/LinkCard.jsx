@@ -62,7 +62,7 @@ const DeleteLink = async (id, dispatch) => {
   })
 }
 
-function LinkCard({ title, url, tags, description, id }) {
+function LinkCard({ title, url, tags, description, id, openEditor }) {
   const [expanded, setExpanded] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl);
@@ -81,6 +81,13 @@ function LinkCard({ title, url, tags, description, id }) {
 
   const actionHandlers = {
     "Edit": async () => {
+      openEditor({
+        _id: id,
+        title: title,
+        url: url,
+        tags: tags,
+        description: description
+      })
       setAnchorEl(null)
     },
     "Delete": () => {
@@ -192,7 +199,7 @@ function LinkCard({ title, url, tags, description, id }) {
         <CardContent>
           {
             (description && description.trim().length !== 0) ?
-              <Typography paragraph>
+              <Typography>
                 {description}
               </Typography> :
               <div

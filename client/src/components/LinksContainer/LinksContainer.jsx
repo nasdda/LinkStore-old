@@ -7,18 +7,23 @@ import LinkCard from '../LinkCard/LinkCard'
 
 import Box from '@mui/material/Box'
 import { Masonry } from '@mui/lab'
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
 import SearchBar from '../common/SearchBar/SearchBar'
 import { TagSelector } from '../common/TagSelector/TagSelector'
+import LinkEditor from '../LinkEditor/LinkEditor'
+
 
 
 function LinksContainer({ links }) {
   const [selectedTags, setSelectedTags] = React.useState([])
   const [searchValue, setSearchValue] = React.useState("")
-
+  const [edit, setEdit] = React.useState(false)
+  const [editLink, setEditLink] = React.useState(undefined)
   const selectTag = (tagLabel) => {
     setSelectedTags([...selectedTags, tagLabel])
   }
-
 
   const unselectTag = (tagLabel) => {
     selectedTags.splice(selectedTags.indexOf(tagLabel), 1)
@@ -27,6 +32,15 @@ function LinksContainer({ links }) {
 
   const handleSearch = (value) => {
     setSearchValue(value)
+  }
+
+  const handleOpenEditor = (targetLink) => {
+    setEditLink(targetLink)
+    setEdit(true)
+  }
+
+  const handleCloseEditor = () => {
+    setEdit(false)
   }
 
   let renderLinks = links
@@ -111,10 +125,31 @@ function LinksContainer({ links }) {
               tags={link.tags}
               description={link.description}
               id={link._id}
+              openEditor={handleOpenEditor}
             />
           ))}
         </Masonry>
       </Box>
+      <Modal
+        open={edit}
+        onClose={handleCloseEditor}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'fit-content',
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <LinkEditor link={editLink} />
+        </Box>
+      </Modal>
     </Container >
   )
 }

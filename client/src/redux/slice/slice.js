@@ -15,7 +15,6 @@ export const slice = createSlice({
     },
     setTags: (state, action) => {
       state.tags = [...action.payload.tags]
-      console.log("tags set to: ", state.tags)
     },
     setLinks: (state, action) => {
       state.links = [...action.payload.links]
