@@ -9,13 +9,20 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Tag from '../common/Tag/Tag'
 import { Divider, Tooltip } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { deleteLink } from '../../redux/slice/slice'
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Box from '@mui/material/Box'
+
+
+const actions = ["Edit", "Delete"]
 
 
 const ExpandMore = styled((props) => {
@@ -57,9 +64,29 @@ const DeleteLink = async (id, dispatch) => {
 
 function LinkCard({ title, url, tags, description, id }) {
   const [expanded, setExpanded] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl);
   const dispatch = useDispatch()
+
   const handleExpandClick = () => {
     setExpanded(!expanded)
+  }
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
+  const actionHandlers = {
+    "Edit": async () => {
+      setAnchorEl(null)
+    },
+    "Delete": () => {
+      DeleteLink(id, dispatch)
+      setAnchorEl(null)
+    }
   }
 
   const notifyCopied = () => toast.success("Copied to clipboard", {
@@ -79,27 +106,48 @@ function LinkCard({ title, url, tags, description, id }) {
           </a>
         }
         action={
-          <Tooltip title="delete">
-            <IconButton aria-label="delete" sx={{
-              '&:focus': {
-                border: "none",
-                outline: "none",
-              },
-            }}
-              onClick={() => {
-                DeleteLink(id, dispatch)
+          <div>
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={open ? 'long-menu' : undefined}
+              aria-expanded={open ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              MenuListProps={{
+                'aria-labelledby': 'long-button',
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              PaperProps={{
+                style: {
+                  width: 'fit-content',
+                },
               }}
             >
-              <DeleteOutlineIcon />
-            </IconButton>
-          </Tooltip>
+              {actions.map((option) => (
+                <MenuItem
+                  key={option}
+                  selected={option === 'Pyxis'}
+                  onClick={actionHandlers[option]}
+                >
+                  {option}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
         }
         sx={{
           paddingBottom: 0
         }}
         titleTypographyProps={{ variant: 'h6' }}
       />
-
 
       <CardContent>
         {tags.map(tag => (
@@ -111,6 +159,7 @@ function LinkCard({ title, url, tags, description, id }) {
           />
         ))}
       </CardContent>
+
       <CardActions disableSpacing>
         <Tooltip title="copy url">
           <IconButton sx={{
@@ -136,6 +185,7 @@ function LinkCard({ title, url, tags, description, id }) {
         >
           <ExpandMoreIcon />
         </ExpandMore>
+
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Divider />
@@ -160,7 +210,7 @@ function LinkCard({ title, url, tags, description, id }) {
           }
         </CardContent>
       </Collapse>
-    </Card>
+    </Card >
   )
 }
 

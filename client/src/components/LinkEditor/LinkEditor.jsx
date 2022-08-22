@@ -14,6 +14,12 @@ import { toast } from 'react-toastify'
 
 
 const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
+  linkTags.sort((taga, tagb) => {
+    if (taga.label > tagb.label) {
+      return 1
+    }
+    return -1
+  })
   await axios.post(`/user/link`, {
     link: {
       title: linkTitle,
