@@ -17,9 +17,7 @@ router.get('/', async function (req, res) {
 /* GET links of user with given uuid*/
 router.get('/links/:uuid', async (req, res) => {
   try {
-    console.log(req.params.uuid)
     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
-    console.log(userLinks)
     if (!userLinks.public && req.params.uuid != req.user.uuid) {
       return res.status(403).json({ message: "Private Links" })
     }
@@ -28,7 +26,6 @@ router.get('/links/:uuid', async (req, res) => {
       tags: userLinks.tags
     })
   } catch (err) {
-    console.log(err)
     return res.status(400).json({ message: err })
   }
 })
@@ -50,6 +47,25 @@ router.patch('/link/visibility', async (req, res) => {
     await UserLinks.updateOne(
       { uuid: req.user.uuid },
       { $set: { public: req.body.public } },
+    )
+    return res.json({ success: true })
+  } catch (err) {
+    return res.status(400)
+  }
+})
+
+router.patch('/link', async (req, res) => {
+  try {
+    await UserLinks.updateOne(
+      { uuid: req.user.uuid, 'links._id': req.body.linkID },
+      {
+        $set: {
+          'links.$.title': req.body.link.title,
+          'links.$.url': req.body.link.url,
+          'links.$.tags': req.body.link.tags,
+          'links.$.description': req.body.link.description
+        }
+      }
     )
     return res.json({ success: true })
   } catch (err) {
@@ -82,7 +98,6 @@ router.get('/links', async (req, res) => {
 
 router.delete('/link', async (req, res) => {
   try {
-    console.log("DELETING: ", req.body.deleteUid)
     await UserLinks.updateOne(
       { uuid: req.user.uuid },
       {

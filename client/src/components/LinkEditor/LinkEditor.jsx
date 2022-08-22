@@ -8,8 +8,8 @@ import Container from '@mui/material/Container'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { TagSelector } from '../common/TagSelector/TagSelector'
-import { useSelector } from 'react-redux'
-import { selectTags } from '../../redux/slice/slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectLinks, selectTags, setLinks } from '../../redux/slice/slice'
 import { toast } from 'react-toastify'
 
 
@@ -30,7 +30,25 @@ const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
   }, { withCredentials: true })
 }
 
-function LinkEditor({ link }) {
+const updateLink = async (linkID, linkTitle, linkURL, linkTags, linkDescription) => {
+  linkTags.sort((taga, tagb) => {
+    if (taga.label > tagb.label) {
+      return 1
+    }
+    return -1
+  })
+  await axios.patch(`/user/link`, {
+    linkID: linkID,
+    link: {
+      title: linkTitle,
+      url: linkURL,
+      tags: linkTags,
+      description: linkDescription
+    }
+  }, { withCredentials: true })
+}
+
+function LinkEditor({ link, setEdit, setEditLink }) {
 
   const [title, setTitle] = React.useState("")
   const [url, setURL] = React.useState("")
@@ -38,6 +56,8 @@ function LinkEditor({ link }) {
   const [description, setDescription] = React.useState("")
   const [openTagCreator, setOpenTagCreator] = React.useState(false)
   const tags = useSelector(selectTags)
+  const allLinks = useSelector(selectLinks)
+  const dispatch = useDispatch()
 
   React.useEffect(() => {
     // Edit mode if link is supplied
@@ -82,9 +102,42 @@ function LinkEditor({ link }) {
     })
   }
 
+  const onUpdateSubmit = e => {
+    e.preventDefault()
+    const finalTags = []
+    tags.forEach(tag => {
+      if (selectedTags.includes(tag.label)) {
+        finalTags.push(tag)
+      }
+    })
+    updateLink(link._id, title, url, finalTags, description).then(() => {
+      const updatedLinks = []
+      for (const oldLink of allLinks) {
+        if (oldLink._id === link._id) {
+          updatedLinks.push({
+            ...link,
+            title: title,
+            url: url,
+            tags: finalTags,
+            description: description
+          })
+        } else {
+          updatedLinks.push({
+            ...oldLink
+          })
+        }
+      }
+      dispatch(setLinks({ links: updatedLinks }))
+      setEdit(false)
+      toast.success("Link has been updated", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    })
+  }
+
   return (
     <Container maxWidth="sm">
-      <Form onSubmit={onFormSubmit}>
+      <Form onSubmit={link ? onUpdateSubmit : onFormSubmit}>
         <Form.Group className="mb-3" >
           <Form.Label>Title</Form.Label>
           <Form.Control

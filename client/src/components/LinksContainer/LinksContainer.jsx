@@ -147,7 +147,10 @@ function LinksContainer({ links }) {
           boxShadow: 24,
           p: 4,
         }}>
-          <LinkEditor link={editLink} />
+          <LinkEditor
+            link={editLink}
+            setEdit={setEdit}
+          />
         </Box>
       </Modal>
     </Container >
