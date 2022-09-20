@@ -10,16 +10,14 @@ import Typography from '@mui/material/Typography'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Tag from '../common/Tag/Tag'
-import { Divider, Tooltip } from '@mui/material'
+import { Divider } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { deleteLink } from '../../redux/slice/slice'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu'
-import MenuIcon from '@mui/icons-material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Box from '@mui/material/Box'
 
 
 const actions = ["Edit", "Delete"]
@@ -27,14 +25,12 @@ const actions = ["Edit", "Delete"]
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
-  return <Tooltip title={expand ? "hide description" : "show description"}>
-    <IconButton sx={{
-      '&:focus': {
-        border: "none",
-        outline: "none",
-      },
-    }} {...other} />
-  </Tooltip>
+  return <IconButton sx={{
+    '&:focus': {
+      border: "none",
+      outline: "none",
+    },
+  }} {...other} />
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
@@ -168,22 +164,20 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
       </CardContent>
 
       <CardActions disableSpacing>
-        <Tooltip title="copy url">
-          <IconButton sx={{
-            '&:focus': {
-              border: "none",
-              outline: "none",
-            },
+        <IconButton sx={{
+          '&:focus': {
+            border: "none",
+            outline: "none",
+          },
+        }}
+          onClick={() => {
+            navigator.clipboard.writeText(url).then(() => {
+              notifyCopied()
+            })
           }}
-            onClick={() => {
-              navigator.clipboard.writeText(url).then(() => {
-                notifyCopied()
-              })
-            }}
-          >
-            <ContentCopyIcon />
-          </IconButton>
-        </Tooltip>
+        >
+          <ContentCopyIcon />
+        </IconButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
