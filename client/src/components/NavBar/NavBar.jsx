@@ -20,7 +20,7 @@ import { selectUser } from '../../redux/slice/slice'
 import axios from 'axios'
 import LinkIcon from './LinkIcon'
 
-const pages = ["Links", "Create"]
+const pages = ["Collections", "Create"]
 const settings = ['Account', 'Logout']
 
 const NavBar = () => {
@@ -50,9 +50,9 @@ const NavBar = () => {
   }
 
   const pageHandlers = {
-    "Links": async () => {
+    "Collections": async () => {
       setAnchorElNav(null)
-      navigate(`/`)
+      navigate(`/collections`)
     },
     "Create": () => {
       navigate('/create')

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { deleteLink } from '../../redux/slice/slice'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
@@ -61,7 +61,7 @@ const DeleteLink = async (id, dispatch) => {
 function LinkCard({ title, url, tags, description, id, openEditor }) {
   const [expanded, setExpanded] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl)
   const dispatch = useDispatch()
 
   const handleExpandClick = () => {
@@ -72,7 +72,7 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(null)
   }
 
   const actionHandlers = {

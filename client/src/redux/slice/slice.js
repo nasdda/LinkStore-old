@@ -5,6 +5,7 @@ export const slice = createSlice({
   name: "main",
   initialState: {
     user: undefined,
+    attemptedLogin: false,
     links: [],
     tags: [] // {label, backgroundColor}
   },
@@ -21,8 +22,8 @@ export const slice = createSlice({
     },
     deleteLink: (state, action) => {
       const newLinks = []
-      for(let i = 0 ; i < state.links.length; i++){
-        if (state.links[i]._id === action.payload.id){
+      for (let i = 0; i < state.links.length; i++) {
+        if (state.links[i]._id === action.payload.id) {
           continue
         }
         newLinks.push(state.links[i])
@@ -32,6 +33,10 @@ export const slice = createSlice({
     addTag: (state, action) => {
       state.tags.push(action.payload.tag)
       state.tags = [...state.tags]
+    },
+    attempted: (state, action) => {
+      state.attemptedLogin = true
+      console.log("ATTEMPED")
     }
   }
 })
@@ -42,11 +47,13 @@ export const {
   setTags,
   setLinks,
   addTag,
-  deleteLink
+  deleteLink,
+  attempted
 } = slice.actions
 
 export const selectUser = state => state.main.user
 export const selectTags = state => state.main.tags
 export const selectLinks = state => state.main.links
+export const selectAttemptedLogin = state => state.main.attemptedLogin
 
 export default slice.reducer

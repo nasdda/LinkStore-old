@@ -7,8 +7,8 @@ import LinkCard from '../LinkCard/LinkCard'
 
 import Box from '@mui/material/Box'
 import { Masonry } from '@mui/lab'
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography'
+import Modal from '@mui/material/Modal'
 
 import SearchBar from '../common/SearchBar/SearchBar'
 import { TagSelector } from '../common/TagSelector/TagSelector'
@@ -133,8 +133,6 @@ function LinksContainer({ links }) {
       <Modal
         open={edit}
         onClose={handleCloseEditor}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
         <Box sx={{
           position: 'absolute',

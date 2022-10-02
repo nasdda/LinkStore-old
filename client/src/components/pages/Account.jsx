@@ -9,7 +9,7 @@ import {
   Typography, CardActions,
   CardHeader, Chip
 } from '@mui/material'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
@@ -112,7 +112,7 @@ const AccountCard = ({ user }) => {
           <div style={{ width: "200px" }}>
             <Select
               value={options.filter(function (option) {
-                return option.value === value;
+                return option.value === value
               })}
               options={options}
               onChange={selected => {

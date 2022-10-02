@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 import { selectTags } from '../../../redux/slice/slice'
 import TagCreator from './TagCreator'
 
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
 
 import { Chip, Tooltip } from '@mui/material'
 
