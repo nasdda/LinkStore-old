@@ -4,7 +4,9 @@ var router = express.Router();
 
 const User = require('../models/userModel')
 const UserLinks = require('../models/userLinksModel');
+const UserCollection = require('../models/userCollectionModel');
 const { response } = require('express');
+
 
 
 /* GET current user. */
@@ -14,31 +16,70 @@ router.get('/', async function (req, res) {
   })
 });
 
-/* GET links of user with given uuid */
-router.get('/links/:uuid', async (req, res) => {
+// /* GET links of user with given uuid */
+// router.get('/links/:uuid', async (req, res) => {
+//   try {
+//     userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
+//     if (!userLinks.public && req.params.uuid != req.user.uuid) {
+//       return res.status(403).json({ message: "Private Links" })
+//     }
+//     return res.status(200).json({
+//       links: userLinks.links,
+//       tags: userLinks.tags
+//     })
+//   } catch (err) {
+//     return res.status(400).json({ message: err })
+//   }
+// })
+
+/* GET collection with given uuid */
+router.get('/collections/:uuid', async (req, res) => {
+  console.log("HERE", req.params, req.user.uuid)
   try {
-    userLinks = await UserLinks.findOne({ uuid: req.params.uuid })
-    if (!userLinks.public && req.params.uuid != req.user.uuid) {
-      return res.status(403).json({ message: "Private Links" })
+    userCollection = await UserCollection.findOne({ uuid: req.params.uuid })
+    if (!userCollection.public && req.user.uuid !== userCollection.userID) {
+      return res.status(403).json({ message: "Private Collection" })
     }
     return res.status(200).json({
-      links: userLinks.links,
-      tags: userLinks.tags
+      links: userCollection.links,
+      tags: userCollection.tags
     })
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json({ message: err })
+  }
+})
+
+/* GET collection preview */
+router.get('/collections', async (req, res) => {
+  try {
+    // Find all collections created by user 
+    userCollections = await UserCollection.find({ userID: req.user.uuid })
+    userCollections.sort((a, b) => (a.createdAt - b.createdAt))
+    res.status(200).json({
+      collections: userCollections
+    })
+    return res.status(200)
   } catch (err) {
     return res.status(400).json({ message: err })
   }
 })
 
-/* POST new link */
-router.post('/link', async (req, res) => {
+/* POST new collection */
+router.post('/collections', async (req, res) => {
+  console.log('here', req.body)
   try {
-    await UserLinks.updateOne(
-      { uuid: req.user.uuid },
-      { $push: { links: req.body.link } },
-    )
-    return res.json({ success: true })
+    const userCollection = new UserCollection({
+      userID: req.user.uuid,
+      name: req.body.name,
+      public: req.body.public,
+      createdAt: Date.now()
+    })
+    console.log(userCollection)
+    await userCollection.save()
+    return res.status(200).json({ success: true })
   } catch (err) {
+    console.log(err)
     return res.status(400)
   }
 })

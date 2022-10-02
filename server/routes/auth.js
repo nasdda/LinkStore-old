@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken")
 
 const User = require('../models/userModel')
 const UserLinks = require('../models/userLinksModel')
+const UserCollection = require('../models/userCollectionModel')
 
-const { OAuth2Client } = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library');
+const { collection } = require('../models/userModel');
 const client = new OAuth2Client(process.env.CLIENT_ID)
 
 router.post("/google-login",
@@ -33,10 +35,13 @@ router.post("/google-login",
           picture: payload.picture
         })
         await user.save()
-        links = new UserLinks({
-          uuid: user.uuid
+        // Initial Collection
+        userCollection = new UserCollection({
+          userID: user.uuid,
+          name: 'General',
+          createdAt: Date.now()
         })
-        await links.save()
+        await userCollection.save()
       }
       token = jwt.sign(
         { user: user },
