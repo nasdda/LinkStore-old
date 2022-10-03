@@ -11,36 +11,32 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
+import { useParams } from 'react-router-dom'
 
 import { useNavigate } from "react-router-dom"
 
 import { useSelector } from 'react-redux'
-import { selectUser } from '../../redux/slice/slice'
+import { selectCollectionUUID, selectUser } from '../../redux/slice/slice'
 
 import axios from 'axios'
 import LinkIcon from './LinkIcon'
 
 const pages = ["Collections", "Create"]
-const settings = ['Account', 'Logout']
+const settings = ['Logout']
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const user = useSelector(selectUser)
+  const collectionUUID = useSelector(selectCollectionUUID)
   const navigate = useNavigate()
 
-
   const settingHandlers = {
-    'Account': () => {
-      setAnchorElUser(null)
-      navigate('/account')
-    },
     'Logout': async () => {
       try {
         await axios.post('/user/logout', {}, { withCredentials: true })
         setAnchorElUser(null)
       } catch (err) {
-        console.log(err)
       } finally {
         navigate('/')
         window.location.reload(false)
@@ -55,8 +51,12 @@ const NavBar = () => {
       navigate(`/collections`)
     },
     "Create": () => {
-      navigate('/create')
       setAnchorElNav(null)
+      if (collectionUUID) {
+        navigate('/create/' + collectionUUID)
+      } else {
+        navigate('/create')
+      }
     }
   }
 

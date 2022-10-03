@@ -29,7 +29,6 @@ function App() {
     axios.get('/user', {}, { withCredentials: true }).then(resp => {
       dispatch(setUser({ user: resp.data.user }))
     }).finally(() => {
-      console.log("EREREREE")
       dispatch(attempted())
     })
     /* global google */
@@ -49,7 +48,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Collections />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/create/:uuid" element={<Create />} />
+        {/* <Route path="/account" element={<Account />} /> */}
         <Route path="/collections" element={<Collections />} />
         <Route path="/collections/:uuid" element={<Links />} />
       </Routes>

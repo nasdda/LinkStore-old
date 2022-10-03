@@ -7,23 +7,18 @@ import axios from 'axios'
 import Container from '@mui/material/Container'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectLinks, selectTags, setLinks } from '../../redux/slice/slice'
 import { toast } from 'react-toastify'
 
 
-function CollectionEditor({ link, onClose }) {
+function CollectionEditor({ collection, onClose, addCollection, updateCollection }) {
   const [name, setName] = React.useState("")
   const [visibility, setVisibility] = React.useState('private')
   React.useEffect(() => {
-    if (link) {
-      const editSelectedTags = []
-      for (const tag of link.tags) {
-        editSelectedTags.push(tag.label)
-      }
-      setName(link.title)
+    if (collection) {
+      setName(collection.name)
+      setVisibility(collection.public ? 'public' : 'private')
     }
-  }, [link])
+  }, [collection])
 
   const onFormSubmit = e => {
     e.preventDefault()
@@ -34,20 +29,44 @@ function CollectionEditor({ link, onClose }) {
       toast.success("Collection created", {
         position: toast.POSITION.BOTTOM_RIGHT,
       })
+      addCollection(resp.data.collection)
     }).catch(err => {
       toast.error("Failed to create collection", {
         position: toast.POSITION.BOTTOM_RIGHT,
       })
+    }).finally(() => {
+      onClose()
     })
   }
 
   const onUpdateSubmit = e => {
     e.preventDefault()
+    axios.patch(`/user/collection`, {
+      uuid: collection.uuid,
+      name: name,
+      public: visibility === 'public'
+    }, { withCredentials: true }).then(resp => {
+      updateCollection({
+        uuid: collection.uuid,
+        name: name,
+        public: visibility === 'public',
+        createdAt: collection.createdAt
+      })
+      toast.success("Collection updated", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    }).catch(err => {
+      toast.error("Failed to update collection", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    }).finally(() => {
+      onClose()
+    })
   }
 
   return (
     <Container maxWidth="sm">
-      <Form onSubmit={link ? onUpdateSubmit : onFormSubmit}>
+      <Form onSubmit={collection ? onUpdateSubmit : onFormSubmit}>
         <Form.Group className="mb-3" >
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -71,7 +90,7 @@ function CollectionEditor({ link, onClose }) {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Create
+          {collection ? "Update" : "Create"}
         </Button>
         <Button
           variant="primary"

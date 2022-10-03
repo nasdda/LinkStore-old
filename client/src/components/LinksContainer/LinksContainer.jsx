@@ -13,7 +13,10 @@ import SearchBar from '../common/SearchBar/SearchBar'
 import { TagSelector } from '../common/TagSelector/TagSelector'
 import LinkEditor from '../LinkEditor/LinkEditor'
 
-
+// Escape special characters for regex matching
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
 
 function LinksContainer({ links }) {
   const [selectedTags, setSelectedTags] = React.useState([])
@@ -65,7 +68,7 @@ function LinksContainer({ links }) {
 
   // finter by keyword
   if (searchValue.trim().length !== 0) {
-    let keyword = searchValue.trim().toLowerCase()
+    let keyword = escapeRegExp(searchValue.trim().toLowerCase())
     renderLinks = renderLinks.filter(link => {
       let regex = new RegExp(keyword, "i")
       if (regex.test(link.title) || regex.test(link.url) || regex.test(link.description)) {

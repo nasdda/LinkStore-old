@@ -121,9 +121,7 @@ const AccountCard = ({ user }) => {
                   { public: selected.value === 'public' },
                   { withCredentials: true }
                 ).then(res => {
-                  console.log(res)
                   if (res.status === 200) {
-                    console.log(selected.value)
                     setValue(selected.value)
                     setDisabled(false)
                   } else {

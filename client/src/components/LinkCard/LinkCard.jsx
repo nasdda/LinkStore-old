@@ -18,7 +18,7 @@ import { deleteLink } from '../../redux/slice/slice'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-
+import { useParams } from 'react-router-dom'
 
 const actions = ["Edit", "Delete"]
 
@@ -38,10 +38,11 @@ const ExpandMore = styled((props) => {
   }),
 }))
 
-const DeleteLink = async (id, dispatch) => {
+const DeleteLink = async (collectionID, id, dispatch) => {
   await axios.delete(`/user/link`, {
     data: {
-      deleteUid: id
+      deleteUid: id,
+      uuid: collectionID
     }
   }, { withCredentials: true }).then(resp => {
     if (resp.data.success) {
@@ -62,6 +63,7 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const dispatch = useDispatch()
+  const params = useParams()
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -86,7 +88,7 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
       setAnchorEl(null)
     },
     "Delete": () => {
-      DeleteLink(id, dispatch)
+      DeleteLink(params.uuid, id, dispatch)
       setAnchorEl(null)
     }
   }
@@ -103,8 +105,12 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
 
       <CardHeader
         title={
-          <a href={url} rel="noreferrer" target="_blank">
-            {title}
+          <a href={url} rel="noreferrer" target="_blank" style={{
+            textDecoration: 'none',
+          }}>
+            <Typography>
+              {title}
+            </Typography>
           </a>
         }
         action={

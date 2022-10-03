@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import LinksContainer from '../LinksContainer/LinksContainer'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAttemptedLogin, selectLinks, selectUser, setLinks, setTags } from '../../redux/slice/slice'
+import { selectAttemptedLogin, selectUser, setCollectionUUID } from '../../redux/slice/slice'
 import Loader from '../common/Loader/Loader'
 import CollectionCard from '../CollectionCard/CollectionCard'
 import Container from '@mui/material/Container'
@@ -13,16 +11,17 @@ import Box from '@mui/material/Box'
 import CollectionEditor from '../CollectionEditor/CollectionEditor'
 
 function Collections(props) {
-  const dispatch = useDispatch()
-  const links = useSelector(selectLinks)
   const [loading, setLoading] = useState(true)
   const [errorText, setErrorText] = useState("")
   const [collections, setCollections] = useState([])
   const [create, setCreate] = useState(false)
+  const [editCollection, setEditCollection] = useState(undefined)
   const user = useSelector(selectUser)
   const attemptedLogin = useSelector(selectAttemptedLogin)
+  const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(setCollectionUUID({ connectionUUID: null }))
     if (attemptedLogin) {
       if (user) {
         axios.get('/user/collections',
@@ -44,12 +43,49 @@ function Collections(props) {
     }
   }, [user, attemptedLogin])
 
+  const deleteCollection = (uuid) => {
+    let i = 0
+    for (; i < collections.length; i++) {
+      if (collections[i].uuid === uuid) {
+        break
+      }
+    }
+
+    if (i < collections.length) {
+      const newCollections = [...collections]
+      newCollections.splice(i, 1)
+      setCollections(newCollections)
+    }
+  }
+
+  const addCollection = (collection) => {
+    setCollections([...collections, collection])
+  }
+
   const handleCreateCollection = () => {
+    setEditCollection(undefined)
     setCreate(true)
   }
 
   const handleCloseCreateCollection = () => {
     setCreate(false)
+  }
+
+  const handleEditCollection = (c) => {
+    setEditCollection(c)
+    setCreate(true)
+  }
+
+  const updateCollection = (c) => {
+    const newCollections = [...collections]
+    for (let i = 0; i < newCollections.length; i++) {
+      if (newCollections[i].uuid === c.uuid) {
+        newCollections[i] = {
+          ...c
+        }
+      }
+      setCollections(newCollections)
+    }
   }
 
   const Body = () => {
@@ -84,6 +120,10 @@ function Collections(props) {
                           name={collection.name}
                           createdAt={collection.createdAt}
                           uuid={collection.uuid}
+                          handleEdit={() => {
+                            handleEditCollection(collection)
+                          }}
+                          deleteCollection={deleteCollection}
                         />
                       </div>
                     ))
@@ -105,9 +145,12 @@ function Collections(props) {
                     boxShadow: 24,
                     p: 4,
                   }}>
-                    <div>
-                      <CollectionEditor onClose={handleCloseCreateCollection} />
-                    </div>
+                    <CollectionEditor
+                      collection={editCollection}
+                      onClose={handleCloseCreateCollection}
+                      addCollection={addCollection}
+                      updateCollection={updateCollection}
+                    />
                   </Box>
                 </Modal>
               </Container>

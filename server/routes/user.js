@@ -34,7 +34,6 @@ router.get('/', async function (req, res) {
 
 /* GET collection with given uuid */
 router.get('/collections/:uuid', async (req, res) => {
-  console.log("HERE", req.params, req.user.uuid)
   try {
     userCollection = await UserCollection.findOne({ uuid: req.params.uuid })
     if (!userCollection.public && req.user.uuid !== userCollection.userID) {
@@ -68,7 +67,6 @@ router.get('/collections', async (req, res) => {
 
 /* POST new collection */
 router.post('/collections', async (req, res) => {
-  console.log('here', req.body)
   try {
     const userCollection = new UserCollection({
       userID: req.user.uuid,
@@ -78,9 +76,43 @@ router.post('/collections', async (req, res) => {
     })
     console.log(userCollection)
     await userCollection.save()
-    return res.status(200).json({ success: true })
+    return res.status(200).json({
+      collection: userCollection,
+      success: true
+    })
   } catch (err) {
     console.log(err)
+    return res.status(400)
+  }
+})
+
+/* DELETE a given collection */
+router.delete('/collection', async (req, res) => {
+  console.log("delete collection", req.body)
+  try {
+    await UserCollection.deleteOne(
+      { uuid: req.body.uuid, userID: req.user.uuid }
+    )
+    res.json({ success: true })
+  } catch (err) {
+    res.json.status(400)
+  }
+})
+
+/* PATCH the setting of the given collection */
+router.patch('/collection', async (req, res) => {
+  try {
+    await UserCollection.updateOne(
+      { uuid: req.body.uuid, userID: req.user.uuid },
+      {
+        $set: {
+          'name': req.body.name,
+          'public': req.body.public,
+        }
+      }
+    )
+    return res.json({ success: true })
+  } catch (err) {
     return res.status(400)
   }
 })
@@ -144,8 +176,8 @@ router.get('/links', async (req, res) => {
 /* DELETE a given link with _id of req.body.deleteUid */
 router.delete('/link', async (req, res) => {
   try {
-    await UserLinks.updateOne(
-      { uuid: req.user.uuid },
+    await UserCollection.updateOne(
+      { uuid: req.body.uuid, userID: req.user.uuid },
       {
         $pull: {
           links: { _id: req.body.deleteUid }
@@ -174,7 +206,6 @@ router.post('/tag', async (req, res) => {
 /* POST new tag for the given collection */
 router.post('/link', async (req, res) => {
   try {
-    console.log(req.body)
     await UserCollection.updateOne(
       { uuid: req.body.uuid, userID: req.user.uuid },
       { $push: { links: req.body.link } },

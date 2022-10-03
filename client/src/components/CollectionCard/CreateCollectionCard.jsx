@@ -6,8 +6,8 @@ import AddIcon from '@mui/icons-material/Add'
 function CreateCollectionCard({ onClick }) {
   return (
     <Card sx={{
-      width: 200,
-      height: 150
+      width: 250,
+      height: 200
     }}>
       <CardActionArea sx={{
         display: 'flex',

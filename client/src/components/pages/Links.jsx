@@ -3,8 +3,10 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import LinksContainer from '../LinksContainer/LinksContainer'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLinks, selectUser, setLinks, setTags } from '../../redux/slice/slice'
+import { selectLinks, selectUser, setCollectionUUID, setLinks, setTags } from '../../redux/slice/slice'
 import Loader from '../common/Loader/Loader'
+import Container from '@mui/material/Container'
+import { Typography } from '@mui/material'
 
 
 function Links(props) {
@@ -17,7 +19,7 @@ function Links(props) {
   const user = useSelector(selectUser)
 
   useEffect(() => {
-    console.log(params.uuid)
+    dispatch(setCollectionUUID({ collectionUUID: params.uuid }))
     // fetch links to be displayed
     axios.get(params.uuid ? `/user/collections/${params.uuid}` : '/user/links',
       {}, { withCredentials: true }).then(resp => {
@@ -25,7 +27,6 @@ function Links(props) {
         dispatch(setLinks({ links: resp.data.links }))
         dispatch(setTags({ tags: resp.data.tags }))
         setLoading(false)
-        console.log("LINKS: ", resp.data.links)
       }).catch(err => {
         if (err.response.status === 403) {
           setEmptyText("Private Collection")
@@ -41,15 +42,17 @@ function Links(props) {
   const Body = () => {
     return (
       <>
-        <div
-          style={{
-            width: '100%',
+        <Container maxWidth='sm' >
+          <Typography sx={{
+            width: 'inherit',
             display: 'flex',
             justifyContent: 'center',
-            fontSize: '2.5rem',
-            fontWeight: 'bold'
-          }}
-        >{collectionName}</div>
+            fontSize: '2rem',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginTop: '10px'
+          }}>{collectionName}</Typography>
+        </Container>
         {
           links.length === 0 ?
             <div

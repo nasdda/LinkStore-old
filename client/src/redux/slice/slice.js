@@ -7,12 +7,12 @@ export const slice = createSlice({
     user: undefined,
     attemptedLogin: false,
     links: [],
-    tags: [] // {label, backgroundColor}
+    tags: [], // {label, backgroundColor}
+    collectionUUID: undefined
   },
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload.user
-      console.log("user set to: ", state.user)
     },
     setTags: (state, action) => {
       state.tags = [...action.payload.tags]
@@ -36,7 +36,9 @@ export const slice = createSlice({
     },
     attempted: (state, action) => {
       state.attemptedLogin = true
-      console.log("ATTEMPED")
+    },
+    setCollectionUUID: (state, action) => {
+      state.collectionUUID = action.payload.collectionUUID
     }
   }
 })
@@ -48,12 +50,14 @@ export const {
   setLinks,
   addTag,
   deleteLink,
-  attempted
+  attempted,
+  setCollectionUUID
 } = slice.actions
 
 export const selectUser = state => state.main.user
 export const selectTags = state => state.main.tags
 export const selectLinks = state => state.main.links
 export const selectAttemptedLogin = state => state.main.attemptedLogin
+export const selectCollectionUUID = state => state.main.collectionUUID
 
 export default slice.reducer

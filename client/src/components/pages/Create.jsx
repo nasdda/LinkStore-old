@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useSelector } from 'react-redux'
-import { selectAttemptedLogin, selectUser } from '../../redux/slice/slice'
+import { selectAttemptedLogin, selectCollectionUUID, selectUser } from '../../redux/slice/slice'
 import LinkEditor from '../LinkEditor/LinkEditor'
 
 import axios from 'axios'
@@ -10,6 +10,7 @@ import Loader from '../common/Loader/Loader'
 import Select from 'react-select'
 import Container from '@mui/material/Container'
 import Form from 'react-bootstrap/Form'
+import { useParams } from 'react-router-dom'
 
 export default function Create(props) {
   const [loading, setLoading] = React.useState(true)
@@ -19,6 +20,8 @@ export default function Create(props) {
   const [disabled, setDisabled] = React.useState(false)
   const user = useSelector(selectUser)
   const attemptedLogin = useSelector(selectAttemptedLogin)
+  const params = useParams()
+
   React.useEffect(() => {
     dispatch(setTags({ tags: [] }))
     if (attemptedLogin) {
@@ -28,19 +31,26 @@ export default function Create(props) {
             dispatch(setTags({ tags: resp.data.tags }))
             setDisabled(false)
           }).catch(err => {
-            console.log(err)
           })
       } else {
         axios.get('/user/collections', {}, { withCredentials: true }).then(resp => {
           setCollections(resp.data.collections)
+          let collection = resp.data.collections[0]
+          if (params.uuid) {
+            for (const c of resp.data.collections) {
+              if (c.uuid === params.uuid) {
+                collection = c
+                break
+              }
+            }
+          }
           setCollection({
-            value: resp.data.collections[0].name,
-            label: resp.data.collections[0].name,
-            uuid: resp.data.collections[0].uuid
+            value: collection.name,
+            label: collection.name,
+            uuid: collection.uuid
           })
           // dispatch(setTags({ tags: resp.data.tags }))
         }).catch(err => {
-          console.log(err)
         }).finally(() => {
           setLoading(false)
         })
@@ -62,6 +72,7 @@ export default function Create(props) {
           <Form.Group className="mb-3">
             <Form.Label>Collection</Form.Label>
             <Select
+              isSearchable={false}
               value={options.filter(function (option) {
                 return option.value === collection.value
               })}
