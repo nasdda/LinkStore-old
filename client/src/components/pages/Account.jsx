@@ -6,8 +6,7 @@ import Loader from '../common/Loader/Loader'
 import { Container, IconButton, Tooltip } from '@mui/material'
 import {
   Card, CardContent, Avatar,
-  Typography, CardActions,
-  CardHeader, Chip
+  Typography, Chip
 } from '@mui/material'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'

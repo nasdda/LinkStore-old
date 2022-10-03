@@ -5,7 +5,6 @@ var router = express.Router();
 const jwt = require("jsonwebtoken")
 
 const User = require('../models/userModel')
-const UserLinks = require('../models/userLinksModel')
 const UserCollection = require('../models/userCollectionModel')
 
 const { OAuth2Client } = require('google-auth-library');

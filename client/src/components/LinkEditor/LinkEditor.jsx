@@ -5,13 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
 
 import Container from '@mui/material/Container'
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { TagSelector } from '../common/TagSelector/TagSelector'
+import Form from 'react-bootstrap/Form'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLinks, selectTags, setLinks, setTags } from '../../redux/slice/slice'
-import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { selectLinks, selectTags, setLinks } from '../../redux/slice/slice'
+import { TagSelector } from '../common/TagSelector/TagSelector'
 
 const postNewLink = async (
   collection, linkTitle, linkURL, linkTags,

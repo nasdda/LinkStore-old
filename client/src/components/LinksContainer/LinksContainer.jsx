@@ -5,8 +5,8 @@ import Container from '@mui/material/Container'
 import LinkCard from '../LinkCard/LinkCard'
 
 
-import Box from '@mui/material/Box'
 import { Masonry } from '@mui/lab'
+import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 
 import SearchBar from '../common/SearchBar/SearchBar'

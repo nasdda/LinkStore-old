@@ -2,12 +2,8 @@ require('dotenv').config()
 var express = require('express');
 var router = express.Router();
 
-const User = require('../models/userModel')
 const UserLinks = require('../models/userLinksModel');
 const UserCollection = require('../models/userCollectionModel');
-const { response } = require('express');
-
-
 
 /* GET current user. */
 router.get('/', async function (req, res) {

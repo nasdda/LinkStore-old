@@ -3,14 +3,13 @@ import { useSelector } from 'react-redux'
 import { selectAttemptedLogin, selectCollectionUUID, selectUser } from '../../redux/slice/slice'
 import LinkEditor from '../LinkEditor/LinkEditor'
 
+import Container from '@mui/material/Container'
 import axios from 'axios'
+import Form from 'react-bootstrap/Form'
 import { useDispatch } from 'react-redux'
+import Select from 'react-select'
 import { setTags } from '../../redux/slice/slice'
 import Loader from '../common/Loader/Loader'
-import Select from 'react-select'
-import Container from '@mui/material/Container'
-import Form from 'react-bootstrap/Form'
-import { useParams } from 'react-router-dom'
 
 export default function Create(props) {
   const [loading, setLoading] = React.useState(true)

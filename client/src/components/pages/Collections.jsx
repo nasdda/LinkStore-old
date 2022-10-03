@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Modal from '@mui/material/Modal'
 import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAttemptedLogin, selectUser, setCollectionUUID } from '../../redux/slice/slice'
-import Loader from '../common/Loader/Loader'
 import CollectionCard from '../CollectionCard/CollectionCard'
-import Container from '@mui/material/Container'
 import CreateCollectionCard from '../CollectionCard/CreateCollectionCard'
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
 import CollectionEditor from '../CollectionEditor/CollectionEditor'
+import Loader from '../common/Loader/Loader'
 
 function Collections(props) {
   const [loading, setLoading] = useState(true)
