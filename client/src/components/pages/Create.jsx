@@ -20,7 +20,7 @@ export default function Create(props) {
   const [disabled, setDisabled] = React.useState(false)
   const user = useSelector(selectUser)
   const attemptedLogin = useSelector(selectAttemptedLogin)
-  const params = useParams()
+  const collectionUUID = useSelector(selectCollectionUUID)
 
   React.useEffect(() => {
     dispatch(setTags({ tags: [] }))
@@ -36,9 +36,9 @@ export default function Create(props) {
         axios.get('/user/collections', {}, { withCredentials: true }).then(resp => {
           setCollections(resp.data.collections)
           let collection = resp.data.collections[0]
-          if (params.uuid) {
+          if (collectionUUID) {
             for (const c of resp.data.collections) {
-              if (c.uuid === params.uuid) {
+              if (c.uuid === collectionUUID) {
                 collection = c
                 break
               }

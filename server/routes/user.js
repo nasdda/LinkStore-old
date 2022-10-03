@@ -132,9 +132,10 @@ router.patch('/link/visibility', async (req, res) => {
 
 /* PATCH the contents of the link with given _id of linkID */
 router.patch('/link', async (req, res) => {
+  console.log(req.body, req.user.uuid)
   try {
-    await UserLinks.updateOne(
-      { uuid: req.user.uuid, 'links._id': req.body.linkID },
+    await UserCollection.updateOne(
+      { userID: req.user.uuid, uuid: req.body.uuid, 'links._id': req.body.linkID },
       {
         $set: {
           'links.$.title': req.body.link.title,
@@ -146,6 +147,7 @@ router.patch('/link', async (req, res) => {
     )
     return res.json({ success: true })
   } catch (err) {
+    console.log(err)
     return res.status(400)
   }
 })

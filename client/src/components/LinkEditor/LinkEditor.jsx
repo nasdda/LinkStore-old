@@ -11,7 +11,7 @@ import { TagSelector } from '../common/TagSelector/TagSelector'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLinks, selectTags, setLinks, setTags } from '../../redux/slice/slice'
 import { toast } from 'react-toastify'
-
+import { useParams } from 'react-router-dom'
 
 const postNewLink = async (
   collection, linkTitle, linkURL, linkTags,
@@ -34,7 +34,10 @@ const postNewLink = async (
   }, { withCredentials: true })
 }
 
-const updateLink = async (linkID, linkTitle, linkURL, linkTags, linkDescription) => {
+const updateLink = async (
+  collectionID, linkID, linkTitle,
+  linkURL, linkTags, linkDescription
+) => {
   linkTags.sort((taga, tagb) => {
     if (taga.label > tagb.label) {
       return 1
@@ -42,6 +45,7 @@ const updateLink = async (linkID, linkTitle, linkURL, linkTags, linkDescription)
     return -1
   })
   await axios.patch(`/user/link`, {
+    uuid: collectionID,
     linkID: linkID,
     link: {
       title: linkTitle,
@@ -62,6 +66,7 @@ function LinkEditor({ link, setEdit, collection }) {
   const tags = useSelector(selectTags)
   const allLinks = useSelector(selectLinks)
   const dispatch = useDispatch()
+  const params = useParams()
 
   React.useEffect(() => {
     // Edit mode if link is supplied
@@ -114,7 +119,7 @@ function LinkEditor({ link, setEdit, collection }) {
         finalTags.push(tag)
       }
     })
-    updateLink(link._id, title, url, finalTags, description).then(() => {
+    updateLink(params.uuid, link._id, title, url, finalTags, description).then(() => {
       const updatedLinks = []
       for (const oldLink of allLinks) {
         if (oldLink._id === link._id) {

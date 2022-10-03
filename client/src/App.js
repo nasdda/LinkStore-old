@@ -11,7 +11,6 @@ import Collections from './components/pages/Collections'
 import { ToastContainer } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css'
-import Account from './components/pages/Account'
 
 function App() {
   const dispatch = useDispatch()
@@ -48,7 +47,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Collections />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/create/:uuid" element={<Create />} />
         {/* <Route path="/account" element={<Account />} /> */}
         <Route path="/collections" element={<Collections />} />
         <Route path="/collections/:uuid" element={<Links />} />

@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from "react-router-dom"
 
 import { useSelector } from 'react-redux'
-import { selectCollectionUUID, selectUser } from '../../redux/slice/slice'
+import { selectUser } from '../../redux/slice/slice'
 
 import axios from 'axios'
 import LinkIcon from './LinkIcon'
@@ -28,7 +28,6 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const user = useSelector(selectUser)
-  const collectionUUID = useSelector(selectCollectionUUID)
   const navigate = useNavigate()
 
   const settingHandlers = {
@@ -52,11 +51,7 @@ const NavBar = () => {
     },
     "Create": () => {
       setAnchorElNav(null)
-      if (collectionUUID) {
-        navigate('/create/' + collectionUUID)
-      } else {
-        navigate('/create')
-      }
+      navigate('/create')
     }
   }
 
