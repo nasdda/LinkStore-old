@@ -18,7 +18,7 @@ const postNewLink = async (
   linkDescription
 ) => {
   linkTags.sort((taga, tagb) => {
-    if (taga.label > tagb.label) {
+    if (taga.label.toLowerCase() > tagb.label.toLowerCase()) {
       return 1
     }
     return -1
@@ -39,7 +39,7 @@ const updateLink = async (
   linkURL, linkTags, linkDescription
 ) => {
   linkTags.sort((taga, tagb) => {
-    if (taga.label > tagb.label) {
+    if (taga.label.toLowerCase() > tagb.label.toLowerCase()) {
       return 1
     }
     return -1
