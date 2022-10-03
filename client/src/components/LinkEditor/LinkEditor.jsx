@@ -9,11 +9,14 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { TagSelector } from '../common/TagSelector/TagSelector'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLinks, selectTags, setLinks } from '../../redux/slice/slice'
+import { selectLinks, selectTags, setLinks, setTags } from '../../redux/slice/slice'
 import { toast } from 'react-toastify'
 
 
-const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
+const postNewLink = async (
+  collection, linkTitle, linkURL, linkTags,
+  linkDescription
+) => {
   linkTags.sort((taga, tagb) => {
     if (taga.label > tagb.label) {
       return 1
@@ -21,6 +24,7 @@ const postNewLink = async (linkTitle, linkURL, linkTags, linkDescription) => {
     return -1
   })
   await axios.post(`/user/link`, {
+    uuid: collection.uuid,
     link: {
       title: linkTitle,
       url: linkURL,
@@ -48,7 +52,7 @@ const updateLink = async (linkID, linkTitle, linkURL, linkTags, linkDescription)
   }, { withCredentials: true })
 }
 
-function LinkEditor({ link, setEdit, setEditLink }) {
+function LinkEditor({ link, setEdit, collection }) {
 
   const [title, setTitle] = React.useState("")
   const [url, setURL] = React.useState("")
@@ -90,7 +94,7 @@ function LinkEditor({ link, setEdit, setEditLink }) {
         finalTags.push(tag)
       }
     })
-    postNewLink(title, url, finalTags, description).then(() => {
+    postNewLink(collection, title, url, finalTags, description).then(() => {
       setTitle("")
       setURL("")
       setSelectedTags([])
@@ -164,6 +168,7 @@ function LinkEditor({ link, setEdit, setEditLink }) {
             unselectTag={unselectTag}
             openTagCreator={openTagCreator}
             setOpenTagCreator={setOpenTagCreator}
+            collectionID={collection ? collection.uuid : 0}
             insertable
           />
         </Form.Group>

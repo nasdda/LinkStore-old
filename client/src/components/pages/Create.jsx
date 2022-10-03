@@ -12,32 +12,48 @@ import Container from '@mui/material/Container'
 import Form from 'react-bootstrap/Form'
 
 export default function Create(props) {
-  const user = useSelector(selectUser)
   const [loading, setLoading] = React.useState(true)
   const dispatch = useDispatch()
   const [collections, setCollections] = React.useState([])
-  const [collection, setCollection] = React.useState("")
+  const [collection, setCollection] = React.useState(undefined)
   const [disabled, setDisabled] = React.useState(false)
+  const user = useSelector(selectUser)
+  const attemptedLogin = useSelector(selectAttemptedLogin)
+  React.useEffect(() => {
+    dispatch(setTags({ tags: [] }))
+    if (attemptedLogin) {
+      if (collection) {
+        axios.get('/user/collections/' + collection.uuid, {},
+          { withCredentials: true }).then(resp => {
+            dispatch(setTags({ tags: resp.data.tags }))
+            setDisabled(false)
+          }).catch(err => {
+            console.log(err)
+          })
+      } else {
+        axios.get('/user/collections', {}, { withCredentials: true }).then(resp => {
+          setCollections(resp.data.collections)
+          setCollection({
+            value: resp.data.collections[0].name,
+            label: resp.data.collections[0].name,
+            uuid: resp.data.collections[0].uuid
+          })
+          // dispatch(setTags({ tags: resp.data.tags }))
+        }).catch(err => {
+          console.log(err)
+        }).finally(() => {
+          setLoading(false)
+        })
+      }
+    }
 
-  React.useState(() => {
-    axios.get('/user/collections',
-      {}, { withCredentials: true }).then(resp => {
-        setCollections(resp.data.collections)
-        console.log(resp)
-        // dispatch(setTags({ tags: resp.data.tags }))
-      }).catch(err => {
-        console.log(err)
-      }).finally(() => {
-        setLoading(false)
-      })
-  }, [user])
+  }, [user, collection, attemptedLogin])
 
   const options = collections.map(collection => ({
     value: collection.name,
-    label: collection.name
+    label: collection.name,
+    uuid: collection.uuid
   }))
-
-  console.log(collection)
 
   const Body = () => {
     return (
@@ -51,14 +67,14 @@ export default function Create(props) {
               })}
               options={options}
               onChange={selected => {
-                // setDisabled(true)
+                setDisabled(true)
                 setCollection(selected)
               }}
               isDisabled={disabled}
             />
           </Form.Group>
         </Container>
-        <LinkEditor />
+        <LinkEditor collection={collection} />
       </div>
     )
   }
@@ -83,7 +99,6 @@ export default function Create(props) {
             >
               Please Sign In</div>
       }
-
     </div>
   )
 }

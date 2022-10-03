@@ -30,7 +30,15 @@ function CollectionEditor({ link, onClose }) {
     axios.post('/user/collections', {
       name: name,
       public: visibility === 'public'
-    }, { withCredentials: true })
+    }, { withCredentials: true }).then((resp) => {
+      toast.success("Collection created", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    }).catch(err => {
+      toast.error("Failed to create collection", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      })
+    })
   }
 
   const onUpdateSubmit = e => {

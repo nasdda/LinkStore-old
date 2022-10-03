@@ -13,11 +13,15 @@ function Links(props) {
   const links = useSelector(selectLinks)
   const [loading, setLoading] = useState(true)
   const [emptyText, setEmptyText] = useState("Empty")
+  const [collectionName, setCollectionName] = useState("")
   const user = useSelector(selectUser)
+
   useEffect(() => {
+    console.log(params.uuid)
     // fetch links to be displayed
     axios.get(params.uuid ? `/user/collections/${params.uuid}` : '/user/links',
       {}, { withCredentials: true }).then(resp => {
+        setCollectionName(resp.data.name)
         dispatch(setLinks({ links: resp.data.links }))
         dispatch(setTags({ tags: resp.data.tags }))
         setLoading(false)
@@ -25,7 +29,7 @@ function Links(props) {
       }).catch(err => {
         if (err.response.status === 403) {
           setEmptyText("Private Collection")
-        } else if(err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setEmptyText("Please Sign In")
         } else {
           setEmptyText("Collection Does Not Exist")
@@ -36,22 +40,35 @@ function Links(props) {
 
   const Body = () => {
     return (
-      links.length === 0 ?
+      <>
         <div
           style={{
-            fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
+            width: '100%',
             display: 'flex',
-            flexDirection: 'row',
             justifyContent: 'center',
-            marginTop: '2rem',
-            fontWeight: 'bold',
-            fontSize: '2rem',
-            color: 'rgb(196, 196, 196)',
-            userSelect: 'none'
+            fontSize: '2.5rem',
+            fontWeight: 'bold'
           }}
-        >
-          {emptyText}</div> :
-        <LinksContainer links={links} />
+        >{collectionName}</div>
+        {
+          links.length === 0 ?
+            <div
+              style={{
+                fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: '2rem',
+                fontWeight: 'bold',
+                fontSize: '2rem',
+                color: 'rgb(196, 196, 196)',
+                userSelect: 'none'
+              }}
+            >
+              {emptyText}</div> :
+            <LinksContainer links={links} />
+        }
+      </>
     )
   }
 

@@ -35,6 +35,7 @@ export default function TagCreateModal(props) {
       }))
       try {
         await axios.post(`/user/tag`, {
+          uuid: props.collectionID,
           tag: {
             label: tagLabel,
             backgroundColor: color
@@ -45,7 +46,6 @@ export default function TagCreateModal(props) {
           position: toast.POSITION.BOTTOM_RIGHT,
         })
       }
-
 
       setTagLabel("")
     }

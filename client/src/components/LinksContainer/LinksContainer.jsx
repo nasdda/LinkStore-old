@@ -7,7 +7,6 @@ import LinkCard from '../LinkCard/LinkCard'
 
 import Box from '@mui/material/Box'
 import { Masonry } from '@mui/lab'
-import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 
 import SearchBar from '../common/SearchBar/SearchBar'
@@ -77,12 +76,7 @@ function LinksContainer({ links }) {
   }
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{
-        marginTop: "2rem"
-      }}
-    >
+    <Container maxWidth="xl" >
       <SearchBar
         handleSearch={handleSearch}
       />

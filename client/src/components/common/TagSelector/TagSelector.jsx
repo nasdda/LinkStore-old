@@ -12,8 +12,11 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import { Chip, Tooltip } from '@mui/material'
 
 // props should contain an addTag to add selected tag
-export const TagSelector = ({ selectTag, selectedTags,
-  unselectTag, insertable, openTagCreator, setOpenTagCreator }) => {
+export const TagSelector = ({
+  selectTag, selectedTags,
+  unselectTag, insertable, openTagCreator,
+  setOpenTagCreator, collectionID
+}) => {
   const tags = useSelector(selectTags)
 
   const tagLabels = tags.map(tag => tag.label)
@@ -65,6 +68,7 @@ export const TagSelector = ({ selectTag, selectedTags,
           <TagCreator
             labelExists={labelExists}
             open={openTagCreator}
+            collectionID={collectionID}
           />
         </>
       }

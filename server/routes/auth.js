@@ -46,7 +46,7 @@ router.post("/google-login",
       token = jwt.sign(
         { user: user },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "24h" }
+        { expiresIn: "7d" }
       )
       res.cookie('jwt', token, { httpOnly: true, secure: true, maxAge: 86400000 });
       res.status(200).json({

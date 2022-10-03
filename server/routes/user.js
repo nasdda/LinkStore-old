@@ -41,6 +41,7 @@ router.get('/collections/:uuid', async (req, res) => {
       return res.status(403).json({ message: "Private Collection" })
     }
     return res.status(200).json({
+      name: userCollection.name,
       links: userCollection.links,
       tags: userCollection.tags
     })
@@ -157,12 +158,26 @@ router.delete('/link', async (req, res) => {
   }
 })
 
-/* POST new tag for the current link collection */
+/* POST new tag for the given collection */
 router.post('/tag', async (req, res) => {
   try {
-    await UserLinks.updateOne(
-      { uuid: req.user.uuid },
+    await UserCollection.updateOne(
+      { uuid: req.body.uuid, userID: req.user.uuid },
       { $push: { tags: req.body.tag } },
+    )
+    return res.json({ success: true })
+  } catch (err) {
+    return res.status(400)
+  }
+})
+
+/* POST new tag for the given collection */
+router.post('/link', async (req, res) => {
+  try {
+    console.log(req.body)
+    await UserCollection.updateOne(
+      { uuid: req.body.uuid, userID: req.user.uuid },
+      { $push: { links: req.body.link } },
     )
     return res.json({ success: true })
   } catch (err) {
