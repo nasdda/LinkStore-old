@@ -78,8 +78,6 @@ function CollectionCard({ name, createdAt, uuid, deleteCollection, handleEdit })
           action={
             <div>
               <IconButton
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
                 onMouseDown={event => event.stopPropagation()}
               >
@@ -87,9 +85,6 @@ function CollectionCard({ name, createdAt, uuid, deleteCollection, handleEdit })
               </IconButton>
               <Menu
                 id="long-menu"
-                MenuListProps={{
-                  'aria-labelledby': 'long-button',
-                }}
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
