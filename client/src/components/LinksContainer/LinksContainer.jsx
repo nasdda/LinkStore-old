@@ -1,3 +1,5 @@
+import './react-masonry.css'
+
 import * as React from 'react'
 
 
@@ -5,13 +7,25 @@ import Container from '@mui/material/Container'
 import LinkCard from '../LinkCard/LinkCard'
 
 
-import { Masonry } from '@mui/lab'
+
+// import { Masonry } from '@mui/lab'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 
 import SearchBar from '../common/SearchBar/SearchBar'
 import { TagSelector } from '../common/TagSelector/TagSelector'
 import LinkEditor from '../LinkEditor/LinkEditor'
+
+import Masonry from 'react-masonry-css'
+
+const breakpointColumnsObj = {
+  default: 6,
+  1500: 5,
+  1300: 4,
+  1000: 3,
+  700: 2,
+  500: 1
+}
 
 // Escape special characters for regex matching
 function escapeRegExp(string) {
@@ -79,7 +93,7 @@ function LinksContainer({ links }) {
   }
 
   return (
-    <Container maxWidth="xl" >
+    <Container maxWidth="xl">
       <SearchBar
         handleSearch={handleSearch}
       />
@@ -111,8 +125,9 @@ function LinksContainer({ links }) {
       </div>
       <Box sx={{ width: "100%" }}>
         <Masonry
-          columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
-          spacing={2}
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
         >
           {renderLinks.map((link, i) => (
             <LinkCard
