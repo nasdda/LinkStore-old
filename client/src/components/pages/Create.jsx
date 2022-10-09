@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import Select from 'react-select'
 import { setTags } from '../../redux/slice/slice'
 import Loader from '../common/Loader/Loader'
+import { useNavigate } from 'react-router-dom'
 
 export default function Create(props) {
   const [loading, setLoading] = React.useState(true)
@@ -20,6 +21,7 @@ export default function Create(props) {
   const user = useSelector(selectUser)
   const attemptedLogin = useSelector(selectAttemptedLogin)
   const collectionUUID = useSelector(selectCollectionUUID)
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     dispatch(setTags({ tags: [] }))
@@ -84,7 +86,10 @@ export default function Create(props) {
             />
           </Form.Group>
         </Container>
-        <LinkEditor collection={collection} />
+        <LinkEditor
+          collection={collection}
+          navigate={() => { navigate(`/collections/${collection ? collection.uuid : ''}`) }}
+        />
       </div>
     )
   }

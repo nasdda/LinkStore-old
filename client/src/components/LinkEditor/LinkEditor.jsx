@@ -56,7 +56,7 @@ const updateLink = async (
   }, { withCredentials: true })
 }
 
-function LinkEditor({ link, setEdit, collection }) {
+function LinkEditor({ link, setEdit, collection, navigate }) {
 
   const [title, setTitle] = React.useState("")
   const [url, setURL] = React.useState("")
@@ -91,6 +91,17 @@ function LinkEditor({ link, setEdit, collection }) {
     setSelectedTags([...selectedTags])
   }
 
+  const NewLinkMessage = () => {
+    return (
+      <div onClick={() => {
+        navigate()
+        toast.dismiss()
+      }}>
+        New link created
+      </div>
+    )
+  }
+
   const onFormSubmit = e => {
     e.preventDefault()
     const finalTags = []
@@ -105,7 +116,7 @@ function LinkEditor({ link, setEdit, collection }) {
       setSelectedTags([])
       setDescription("")
       setOpenTagCreator(false)
-      toast.success("New link created", {
+      toast.success(<NewLinkMessage />, {
         position: toast.POSITION.BOTTOM_RIGHT,
       })
     })
