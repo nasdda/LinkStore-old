@@ -70,7 +70,6 @@ function LinksContainer({ links, editable }) {
 
   let renderLinks = [...links]
 
-  console.log(renderLinks)
   if (order === 'Newest') {
     renderLinks.sort((a, b) => (b.createdAt - a.createdAt))
   } else {

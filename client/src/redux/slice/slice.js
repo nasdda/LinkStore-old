@@ -25,7 +25,6 @@ export const slice = createSlice({
     },
     setLinks: (state, action) => {
       state.links = [...action.payload.links]
-      console.log(state.links)
     },
     deleteLink: (state, action) => {
       const newLinks = []

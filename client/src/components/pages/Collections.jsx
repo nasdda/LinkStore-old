@@ -30,7 +30,6 @@ function Collections(props) {
             setCollections(resp.data.collections)
             setErrorText("")
           }).catch(err => {
-            console.log('jererere')
             if (err.response.status === 401) {
               setErrorText("Please Sign In")
             }
