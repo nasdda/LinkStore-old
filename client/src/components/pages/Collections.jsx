@@ -26,6 +26,7 @@ function Collections(props) {
       if (user) {
         axios.get('/user/collections',
           {}, { withCredentials: true }).then(resp => {
+            resp.data.collections.sort((a, b) => (a.createdAt - b.createdAt))
             setCollections(resp.data.collections)
             setErrorText("")
           }).catch(err => {

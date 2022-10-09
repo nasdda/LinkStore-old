@@ -16,6 +16,7 @@ function Links(props) {
   const [loading, setLoading] = useState(true)
   const [emptyText, setEmptyText] = useState("Empty")
   const [collectionName, setCollectionName] = useState("")
+  const [editable, setEditable] = useState(false)
   const user = useSelector(selectUser)
 
   useEffect(() => {
@@ -26,6 +27,7 @@ function Links(props) {
         setCollectionName(resp.data.name)
         dispatch(setLinks({ links: resp.data.links }))
         dispatch(setTags({ tags: resp.data.tags }))
+        setEditable(resp.data.userID === user.uuid)
         setLoading(false)
       }).catch(err => {
         if (err.response.status === 403) {
@@ -38,7 +40,6 @@ function Links(props) {
         setLoading(false)
       })
   }, [user, params.uuid])
-
   const Body = () => {
     return (
       <>
@@ -69,7 +70,10 @@ function Links(props) {
               }}
             >
               {emptyText}</div> :
-            <LinksContainer links={links} />
+            <LinksContainer
+              links={links}
+              editable={editable}
+            />
         }
       </>
     )

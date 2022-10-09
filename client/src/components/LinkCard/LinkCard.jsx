@@ -58,7 +58,7 @@ const DeleteLink = async (collectionID, id, dispatch) => {
   })
 }
 
-function LinkCard({ title, url, tags, description, id, openEditor }) {
+function LinkCard({ title, url, tags, description, id, openEditor, editable }) {
   const [expanded, setExpanded] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -102,53 +102,72 @@ function LinkCard({ title, url, tags, description, id, openEditor }) {
       maxWidth: 350,
       wordBreak: 'break-word',
     }}>
-
-      <CardHeader
-        title={
-          <a href={url} rel="noreferrer" target="_blank" style={{
-            textDecoration: 'none',
-          }}>
-            <Typography>
-              {title}
-            </Typography>
-          </a>
-        }
-        action={
-          <div>
-            <IconButton
-              id="long-button"
-              onClick={handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="long-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  width: 'fit-content',
-                },
-              }}
-            >
-              {actions.map((option) => (
-                <MenuItem
-                  key={option}
-                  selected={option === 'Pyxis'}
-                  onClick={actionHandlers[option]}
+      {
+        editable ?
+          <CardHeader
+            title={
+              <a href={url} rel="noreferrer" target="_blank" style={{
+                textDecoration: 'none',
+              }}>
+                <Typography>
+                  {title}
+                </Typography>
+              </a>
+            }
+            action={
+              <div>
+                <IconButton
+                  id="long-button"
+                  onClick={handleClick}
                 >
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
-        }
-        sx={{
-          paddingBottom: 0
-        }}
-        titleTypographyProps={{ variant: 'h6' }}
-      />
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="long-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  PaperProps={{
+                    style: {
+                      width: 'fit-content',
+                    },
+                  }}
+                >
+                  {actions.map((option) => (
+                    <MenuItem
+                      key={option}
+                      selected={option === 'Pyxis'}
+                      onClick={actionHandlers[option]}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
+            }
+            sx={{
+              paddingBottom: 0
+            }}
+            titleTypographyProps={{ variant: 'h6' }}
+          />
+          :
+          <CardHeader
+            title={
+              <a href={url} rel="noreferrer" target="_blank" style={{
+                textDecoration: 'none',
+              }}>
+                <Typography>
+                  {title}
+                </Typography>
+              </a>
+            }
+            sx={{
+              paddingBottom: 0
+            }}
+            titleTypographyProps={{ variant: 'h6' }}
+          />
+      }
+
 
       <CardContent>
         {tags.map(tag => (

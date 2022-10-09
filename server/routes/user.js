@@ -38,7 +38,8 @@ router.get('/collections/:uuid', async (req, res) => {
     return res.status(200).json({
       name: userCollection.name,
       links: userCollection.links,
-      tags: userCollection.tags
+      tags: userCollection.tags,
+      userID: userCollection.userID
     })
   } catch (err) {
     console.log(err)
@@ -51,7 +52,6 @@ router.get('/collections', async (req, res) => {
   try {
     // Find all collections created by user 
     userCollections = await UserCollection.find({ userID: req.user.uuid })
-    userCollections.sort((a, b) => (a.createdAt - b.createdAt))
     res.status(200).json({
       collections: userCollections
     })
@@ -206,7 +206,14 @@ router.post('/link', async (req, res) => {
   try {
     await UserCollection.updateOne(
       { uuid: req.body.uuid, userID: req.user.uuid },
-      { $push: { links: req.body.link } },
+      {
+        $push: {
+          links: {
+            createdAt: Date.now(),
+            ...req.body.link
+          }
+        }
+      },
     )
     return res.json({ success: true })
   } catch (err) {

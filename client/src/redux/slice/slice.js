@@ -15,10 +15,17 @@ export const slice = createSlice({
       state.user = action.payload.user
     },
     setTags: (state, action) => {
+      action.payload.tags.sort((taga, tagb) => {
+        if (taga.label.toLowerCase() > tagb.label.toLowerCase()) {
+          return 1
+        }
+        return -1
+      })
       state.tags = [...action.payload.tags]
     },
     setLinks: (state, action) => {
       state.links = [...action.payload.links]
+      console.log(state.links)
     },
     deleteLink: (state, action) => {
       const newLinks = []
@@ -32,6 +39,12 @@ export const slice = createSlice({
     },
     addTag: (state, action) => {
       state.tags.push(action.payload.tag)
+      state.tags.sort((taga, tagb) => {
+        if (taga.label.toLowerCase() > tagb.label.toLowerCase()) {
+          return 1
+        }
+        return -1
+      })
       state.tags = [...state.tags]
     },
     attempted: (state, action) => {

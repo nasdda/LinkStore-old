@@ -136,6 +136,7 @@ function LinkEditor({ link, setEdit, collection, navigate }) {
         if (oldLink._id === link._id) {
           updatedLinks.push({
             ...link,
+            createdAt: oldLink.createdAt,
             title: title,
             url: url,
             tags: finalTags,

@@ -2,21 +2,17 @@ import './react-masonry.css'
 
 import * as React from 'react'
 
-
-import Container from '@mui/material/Container'
 import LinkCard from '../LinkCard/LinkCard'
-
-
-
 // import { Masonry } from '@mui/lab'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
+import { Box, Modal, Typography, Container } from '@mui/material'
 
 import SearchBar from '../common/SearchBar/SearchBar'
 import { TagSelector } from '../common/TagSelector/TagSelector'
 import LinkEditor from '../LinkEditor/LinkEditor'
 
 import Masonry from 'react-masonry-css'
+
+import Select from 'react-select'
 
 const breakpointColumnsObj = {
   default: 6,
@@ -32,11 +28,13 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-function LinksContainer({ links }) {
+function LinksContainer({ links, editable }) {
   const [selectedTags, setSelectedTags] = React.useState([])
   const [searchValue, setSearchValue] = React.useState("")
   const [edit, setEdit] = React.useState(false)
   const [editLink, setEditLink] = React.useState(undefined)
+  const [disabled, setDisabled] = React.useState(false)
+  const [order, setOrder] = React.useState('Newest')
   const selectTag = (tagLabel) => {
     setSelectedTags([...selectedTags, tagLabel])
   }
@@ -59,7 +57,25 @@ function LinksContainer({ links }) {
     setEdit(false)
   }
 
-  let renderLinks = links
+  const options = [
+    {
+      value: 'Newest',
+      label: 'Newest'
+    },
+    {
+      value: 'Oldest',
+      label: 'Oldest'
+    }
+  ]
+
+  let renderLinks = [...links]
+
+  console.log(renderLinks)
+  if (order === 'Newest') {
+    renderLinks.sort((a, b) => (b.createdAt - a.createdAt))
+  } else {
+    renderLinks.sort((a, b) => (a.createdAt - b.createdAt))
+  }
 
   // filter by tags
   if (selectedTags.length !== 0) {
@@ -112,7 +128,7 @@ function LinksContainer({ links }) {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: "2rem"
+            marginBottom: "1rem"
           }}
         >
           <TagSelector
@@ -121,8 +137,32 @@ function LinksContainer({ links }) {
             unselectTag={unselectTag}
           />
         </Container>
-
       </div>
+
+      <Container
+        maxWidth='sm'
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: '2rem'
+        }}>
+        <Typography sx={{ marginRight: '5px' }}>Order By: </Typography>
+        <div style={{ width: '8rem' }}>
+          <Select
+            value={options.filter((option) => {
+              return option.value === order
+            })}
+            isSearchable={false}
+            options={options}
+            onChange={selected => {
+              setOrder(selected.value)
+            }}
+            isDisabled={disabled}
+          />
+        </div>
+      </Container>
+
       <Box sx={{ width: "100%" }}>
         <Masonry
           breakpointCols={breakpointColumnsObj}
@@ -138,6 +178,7 @@ function LinksContainer({ links }) {
               description={link.description}
               id={link._id}
               openEditor={handleOpenEditor}
+              editable={editable}
             />
           ))}
         </Masonry>

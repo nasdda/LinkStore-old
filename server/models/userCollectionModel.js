@@ -4,10 +4,11 @@ const short = require('short-uuid');
 const schema = mongoose.Schema({
   userID: { type: String },
   uuid: { type: String, default: short.generate },
-  name: {type: String},
-  createdAt: {type: Number},
+  name: { type: String },
+  createdAt: { type: Number },
   links: {
     type: [{
+      createdAt: Number,
       url: String,
       title: String,
       tags: [{
@@ -24,7 +25,7 @@ const schema = mongoose.Schema({
       backgroundColor: String
     }]
   },
-  public: { type: Boolean, default: false } 
+  public: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User Collection", schema)
